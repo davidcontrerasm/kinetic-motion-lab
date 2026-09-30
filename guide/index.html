@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en" class="no-js" data-motion="full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Field guide — Kinetic</title>
+  <meta name="description" content="A study guide to motion design and micro-interactions: nine chapters of lessons, live demos, code and quizzes covering timing, easing, springs, choreography, scroll, layout, depth and accessibility.">
+  <meta name="theme-color" content="#0a0a0d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0d'/%3E%3Cpath d='M16 7v18M8.2 11.5l15.6 9M8.2 20.5l15.6-9' stroke='%23ff5a36' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&amp;family=Space+Grotesk:wght@300..700&amp;display=swap">
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.remove('no-js');
+      root.classList.add('js');
+      try {
+        var stored = localStorage.getItem('kinetic:motion');
+        var reduced = stored ? stored === 'reduced' : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root.setAttribute('data-motion', reduced ? 'reduced' : 'full');
+      } catch (e) {}
+    })();
+  </script>
+  <script nomodule>document.documentElement.classList.add('no-module');</script>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/demos.css">
+  <link rel="stylesheet" href="../css/guide.css">
+  <script type="module" src="../js/guide.js"></script>
+</head>
+<body data-page="guide-index">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="cursor" data-cursor-root aria-hidden="true"><div class="cursor__ring"><div class="cursor__shape"></div><span class="cursor__label"></span></div><div class="cursor__dot"></div></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+  <header class="site-header site-header--guide" data-header>
+    <a class="brand" href="../index.html" data-magnetic="0.25">
+      <span class="brand__mark" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-asterisk"/></svg></span>
+      <span class="brand__word">Kinetic</span>
+      <span class="brand__tag">Field guide</span>
+    </a>
+    <nav class="nav" aria-label="Guide">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="../index.html"><span data-roll>Showcase</span></a></li>
+        <li><a class="nav__link" href="index.html" data-guide-link="guide-index"><span data-roll>Guide</span></a></li>
+        <li><button class="nav__link nav__link--menu" type="button" data-chapter-toggle aria-expanded="false" aria-controls="chapter-menu"><span>Chapters</span><svg class="icon nav__chevron" aria-hidden="true"><use href="../assets/icons.svg#i-chevron"/></svg></button></li>
+        <li><a class="nav__link" href="cheatsheet.html" data-guide-link="cheatsheet"><span data-roll>Cheat sheet</span></a></li>
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="true" title="Toggle motion (M)">
+        <span class="motion-toggle__track" aria-hidden="true"><span class="motion-toggle__thumb"></span></span>
+        <span class="motion-toggle__label">Motion <b data-motion-label>On</b></span>
+      </button>
+      <button class="burger" type="button" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu"><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="chapter-menu" id="chapter-menu" data-chapter-menu hidden><div class="chapter-menu__grid" data-chapter-grid></div></div>
+  <div class="mobile-menu mobile-menu--guide" id="mobile-menu" data-menu hidden>
+    <nav aria-label="Mobile"><ol class="mobile-menu__list" data-mobile-list></ol></nav>
+    <p class="mobile-menu__foot">Kinetic field guide</p>
+  </div>
+
+  <main id="main">
+    <section class="gi-hero">
+      <div>
+        <span class="section-label" data-scramble>Kinetic — Field guide</span>
+        <h1 class="gi-hero__title" data-split>Learn motion by touching it.</h1>
+        <p class="gi-hero__lede">Nine chapters, fifty-four lessons and more than sixty live demos. Every idea comes with a working example you can poke, the reasoning behind it, the code that builds it and the mistake to avoid. Start at the beginning or jump to whatever you are building this week.</p>
+        <div class="gi-hero__actions">
+          <a class="btn btn--primary" href="timing.html" data-resume><span data-resume-label>Start with chapter 01</span><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-arrow-right"/></svg></a>
+          <a class="btn" href="cheatsheet.html">Open the cheat sheet</a>
+        </div>
+      </div>
+      <aside class="gi-progress" aria-label="Your progress">
+        <div class="gi-progress__ring">
+          <svg class="ring" viewBox="0 0 44 44" width="150" height="150" data-overall-ring aria-hidden="true"><circle class="ring__track" cx="22" cy="22" r="19"/><circle class="ring__value" cx="22" cy="22" r="19"/></svg>
+          <span class="gi-progress__value"><span data-overall-pct>0</span><small>%</small></span>
+        </div>
+        <p><b data-overall-done>0</b> of 9 chapters studied</p>
+        <p>Lessons tick off as you spend time with them. Progress stays in this browser.</p>
+        <button type="button" data-progress-reset>Reset progress</button>
+      </aside>
+    </section>
+
+    <section class="gi-section" aria-labelledby="how-title">
+      <div class="gi-section__head">
+        <div>
+          <span class="section-label">How to use it</span>
+          <h2 class="gi-section__title" id="how-title" data-split>Read, play, check.</h2>
+        </div>
+        <p class="gi-section__lede">Motion is learned in the hands, not the head. Each lesson is built so you can feel the difference between the right and the wrong version before you are told which is which.</p>
+      </div>
+      <div class="steps">
+        <article class="step" data-reveal>
+          <span class="step__num">01</span>
+          <h3>Read</h3>
+          <p>Each lesson opens with the idea in plain language: what it is, why it works and the numbers worth remembering. A key idea and a common pitfall sit under every demo.</p>
+        </article>
+        <article class="step" data-reveal style="--reveal-delay:90ms">
+          <span class="step__num">02</span>
+          <h3>Play</h3>
+          <p>Every lesson has a live demo. Change the parameters, compare side by side, interrupt things mid-flight. Open “How it’s built” to see the few lines of code that make it work.</p>
+        </article>
+        <article class="step" data-reveal style="--reveal-delay:180ms">
+          <span class="step__num">03</span>
+          <h3>Check</h3>
+          <p>Chapters end with the takeaways and a three-question check with explanations. Mark the chapter as studied when it has clicked; the cheat sheet keeps the numbers handy.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="gi-section" aria-labelledby="chapters-title">
+      <div class="gi-section__head">
+        <div>
+          <span class="section-label">Curriculum</span>
+          <h2 class="gi-section__title" id="chapters-title" data-split>Nine chapters.</h2>
+        </div>
+        <p class="gi-section__lede">They build on each other: timing and curves first, then physics, then patterns that combine them. Each one stands on its own too.</p>
+      </div>
+      <ol class="chapter-list">
+        <li><a class="chapter-row" href="timing.html" style="--c:var(--gold)" data-chapter-row="timing">
+          <span class="chapter-row__num">01</span>
+          <span class="chapter-row__main"><span class="chapter-row__title">Timing &amp; duration</span><span class="chapter-row__blurb">How long motion should last, and why distance, direction and latency change the answer.</span></span>
+          <span class="chapter-row__meta"><span>6 lessons</span><span>15 min</span></span>
+          <span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span>
+          <span class="chapter-row__arrow" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="chapter-row" href="easing.html" style="--c:var(--accent)" data-chapter-row="easing">
+          <span class="chapter-row__num">02</span>
+          <span class="chapter-row__main"><span class="chapter-row__title">Easing &amp; curves</span><span class="chapter-row__blurb">Curves give motion its character. Learn the families, when to use each, and how to author your own.</span></span>
+          <span class="chapter-row__meta"><span>7 lessons</span><span>20 min</span></span>
+          <span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span>
+          <span class="chapter-row__arrow" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="chapter-row" href="springs.html" style="--c:var(--mint)" data-chapter-row="springs">
+          <span class="chapter-row__num">03</span>
+          <span class="chapter-row__main"><span class="chapter-row__title">Springs &amp; physics</span><span class="chapter-row__blurb">Physical motion that stays interruptible: stiffness, damping, momentum, rubber bands and gravity.</span></span>
+          <span class="chapter-row__meta"><span>7 lessons</span><span>20 min</span></span>
+          <span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span>
+          <span class="chapter-row__arrow" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="chapter-row" href="feedback.html" style="--c:var(--lime)" data-chapter-row="feedback">
+          <span class="chapter-row__num">04</span>
+          <span class="chapter-row__main"><span class="chapter-row__title">Micro-interactions</span><span class="chapter-row__blurb">Fourteen production patterns for forms, gestures, progress and delight, each taken apart.</span></span>
+          <span class="chapter-row__meta"><span>5 lessons</span><span>25 min</span></span>
+          <span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span>
+          <span class="chapter-row__arrow" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="chapter-row" href="choreography.html" style="--c:var(--iris)" data-chapter-row="choreography">
+          <span class="chapter-row__num">05</span>
+          <span class="chapter-row__main"><span class="chapter-row__title">Choreography</span><span class="chapter-row__blurb">Stagger, sequence and overlap: turning many moving parts into one readable gesture.</span></span>
+          <span class="chapter-row__meta"><span>6 lessons</span><span>18 min</span></span>
+          <span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span>
+          <span class="chapter-row__arrow" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="chapter-row" href="scroll.html" style="--c:var(--sky)" data-chapter-row="scroll">
+          <span class="chapter-row__num">06</span>
+          <span class="chapter-row__main"><span class="chapter-row__title">Scroll-driven motion</span><span class="chapter-row__blurb">Scroll-triggered versus scroll-linked, parallax, pinned storytelling and native scroll timelines.</span></span>
+          <span class="chapter-row__meta"><span>6 lessons</span><span>16 min</span></span>
+          <span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span>
+          <span class="chapter-row__arrow" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="chapter-row" href="layout.html" style="--c:var(--accent)" data-chapter-row="layout">
+          <span class="chapter-row__num">07</span>
+          <span class="chapter-row__main"><span class="chapter-row__title">Layout &amp; continuity</span><span class="chapter-row__blurb">Keep objects continuous when layout changes: FLIP, animating height, View Transitions and morphing.</span></span>
+          <span class="chapter-row__meta"><span>6 lessons</span><span>18 min</span></span>
+          <span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span>
+          <span class="chapter-row__arrow" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="chapter-row" href="depth.html" style="--c:var(--iris)" data-chapter-row="depth">
+          <span class="chapter-row__num">08</span>
+          <span class="chapter-row__main"><span class="chapter-row__title">Depth &amp; material</span><span class="chapter-row__blurb">Shadows, perspective, blur and light that give a flat screen a sense of material.</span></span>
+          <span class="chapter-row__meta"><span>6 lessons</span><span>14 min</span></span>
+          <span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span>
+          <span class="chapter-row__arrow" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-arrow"/></svg></span>
+        </a></li>
+        <li><a class="chapter-row" href="craft.html" style="--c:var(--mint)" data-chapter-row="craft">
+          <span class="chapter-row__num">09</span>
+          <span class="chapter-row__main"><span class="chapter-row__title">Accessibility &amp; performance</span><span class="chapter-row__blurb">Motion that includes everyone and respects the frame budget: reduced motion, compositor trade-offs and layout cost.</span></span>
+          <span class="chapter-row__meta"><span>5 lessons</span><span>16 min</span></span>
+          <span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span>
+          <span class="chapter-row__arrow" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-arrow"/></svg></span>
+        </a></li>
+      </ol>
+    </section>
+
+    <section class="gi-section" aria-labelledby="ref-title">
+      <div class="gi-section__head">
+        <div>
+          <span class="section-label">Reference</span>
+          <h2 class="gi-section__title" id="ref-title" data-split>Keep it handy.</h2>
+        </div>
+      </div>
+      <div class="refs">
+        <a class="ref-card" href="cheatsheet.html#durations" style="--c:var(--gold)" data-reveal>
+          <span class="ref-card__icon"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-clock"/></svg></span>
+          <span><h3>Cheat sheet</h3><p>Duration scale, easing tokens, spring presets and what every animatable property costs, on one page.</p></span>
+        </a>
+        <a class="ref-card" href="cheatsheet.html#glossary" style="--c:var(--iris);--reveal-delay:90ms" data-reveal>
+          <span class="ref-card__icon"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-book"/></svg></span>
+          <span><h3>Glossary</h3><p>Thirty-six terms, from anticipation to will-change, searchable as you type.</p></span>
+        </a>
+        <a class="ref-card" href="../index.html" style="--c:var(--accent);--reveal-delay:180ms" data-reveal>
+          <span class="ref-card__icon"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-sparkle"/></svg></span>
+          <span><h3>The showcase</h3><p>The single-page portfolio where the techniques from this guide work together.</p></span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="guide-footer">
+    <div class="guide-footer__inner">
+      <span>© 2026 Kinetic · Field guide</span>
+      <span class="guide-footer__links"><a href="../index.html">Showcase</a><a href="index.html">Guide home</a><a href="cheatsheet.html">Cheat sheet</a></span>
+      <span>Press <kbd>M</kbd> to toggle motion</span>
+    </div>
+  </footer>
+</body>
+</html>

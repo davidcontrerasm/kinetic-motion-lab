@@ -1,0 +1,65 @@
+/* Chapter 07 only. Shared swatch geometry remains in sections.css. */
+.l-stage { min-width: 0; }
+.l-stage button:not(.tile__btn), .l-stage select, .l-stage input.range { min-height: 44px; }
+.l-stage button:not(.tile__btn):not(.btn), .l-stage select { padding: 10px 12px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--ink-3); color: var(--paper); font: inherit; }
+.l-stage button[aria-pressed='true']:not(.tile__btn) { border-color: var(--chapter); }
+.l-stage button:disabled { opacity: .55; cursor: default; }
+.l-stage [hidden], [data-swatch-modal][hidden] { display: none !important; }
+.l-control { display: grid; gap: 5px; flex: 1 1 170px; min-width: 0; font-size: 13px; }
+.l-control select { width: 100%; min-width: 0; }
+.l-check { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+.l-check input { width: 22px; height: 22px; }
+.l-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.l-readout, .l-path-readout { font: 12px/1.65 var(--font-mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+body[data-chapter='layout'] figcaption { margin: 12px 4px; color: var(--paper-dim); font-size: 13px; }
+.l-board { position: relative; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: 76px 124px; gap: 18px; min-height: 218px; background: repeating-linear-gradient(90deg,transparent 0 32%,var(--line) 32% 33%); }
+.l-debug-tile { grid-column: 1; grid-row: 1; display: grid; place-items: center; border-radius: 12px; color: var(--ink); background: linear-gradient(130deg,var(--gold),var(--accent)); transform-origin: 0 0; font-weight: 600; }
+.l-board[data-destination='true'] .l-debug-tile { grid-column: 2 / 4; grid-row: 2; }
+.l-ghost { position: absolute; pointer-events: none; border: 2px dashed; font: 12px var(--font-mono); padding: 3px; z-index: 2; }
+.l-ghost--first { color: var(--mint); }.l-ghost--last { color: var(--sky); }
+.l-swatch .segmented button { border: 0 !important; background: transparent !important; padding: 11px 14px !important; }
+.l-swatch .segmented button[aria-checked='true'] { color: var(--ink); }
+.l-swatch .is-list .tile__hex { display: none; }
+.l-swatch .is-list .tile__top { flex-shrink: 0; }
+.l-height-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; align-items: start; }
+.l-height-card { min-width: 0; padding: 12px; background: var(--ink-3); border-radius: 14px; }
+.l-height-card h3 { min-height: 3em; font-size: 16px; }
+.l-height-card > button { width: 100%; }
+.l-height-panel { overflow: hidden; transform-origin: top; }
+.l-height-content { padding: 12px 4px; font-size: 14px; }
+.l-height-content p { margin: 0 0 12px; }.l-height-content a { display: inline-block; padding: 10px 0; color: var(--mint); text-decoration: underline; }
+.l-height-inner { min-height: 0; overflow: hidden; }
+[data-ready='true'] [data-method='max'] .l-height-panel { max-height: 0; transition: max-height 600ms linear; }
+[data-ready='true'] [data-method='max'].is-open .l-height-panel { max-height: 280px; }
+[data-ready='true'] [data-method='grid'] .l-height-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 350ms ease; }
+[data-ready='true'] [data-method='grid'].is-open .l-height-panel { grid-template-rows: 1fr; }
+[data-ready='true'] [data-method='scale'] .l-height-panel { transform: scaleY(0); transition: transform 350ms ease; }
+[data-ready='true'] [data-method='scale'].is-open .l-height-panel { transform: scaleY(1); }
+.l-sibling { border-top: 2px solid var(--chapter); padding-top: 8px; font-size: 12px; }
+.l-albums { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.l-albums button { display: flex; flex-direction: column; gap: 10px; text-align: left; min-width: 0; }
+.l-albums small { color: var(--paper-dim); font-size: 12px; }
+.l-cover { display: flex; align-items: end; padding: 12px; width: 100%; aspect-ratio: 1; border-radius: 10px; color: white; font: 600 clamp(16px,3vw,28px)/1 var(--font-display); transform-origin: 0 0; }
+.l-cover--night { background: repeating-linear-gradient(35deg,transparent 0 14px,#a695ff66 15px 18px),linear-gradient(135deg,#171333,#5532aa); }
+.l-cover--sun { background: radial-gradient(circle at 60% 38%,#fff2b5 0 19%,transparent 20%),linear-gradient(30deg,#722541,#d65826 60%,#f2bc59); }
+.l-cover--field { background: repeating-radial-gradient(ellipse at 90% 15%,#a1d59766 0 3px,transparent 4px 17px),linear-gradient(145deg,#1b4941,#0d2925); }
+.l-album-detail [data-cover-slot] { max-width: 230px; margin: 18px auto; }
+.l-album-detail h3 { font: 500 28px/1.1 var(--font-display); }
+.l-morphs { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+.l-morphs button { display: grid; justify-items: center; gap: 8px; }
+.l-morphs svg { width: 76px; height: 76px; fill: var(--chapter); }
+.l-morphs .l-stroke { fill: none; stroke: var(--chapter); stroke-width: 2.5; stroke-linecap: round; }
+.l-path-readout { display: block; margin-top: 18px; max-height: 120px; overflow: auto; }
+.l-scores { display: grid; gap: 10px; list-style: none; padding: 0; }
+.l-scores li { display: grid; grid-template-columns: 90px minmax(0,1fr) auto; gap: 8px; align-items: center; padding: 16px 10px; background: var(--ink-3); border: 1px solid var(--line); border-radius: 12px; }
+.l-scores [data-badge] { color: var(--gold); font: 11px/1.4 var(--font-mono); }
+.l-scores [data-score-value] { font-variant-numeric: tabular-nums; }
+body[data-chapter='layout'] .modal__close, body[data-chapter='layout'] .modal__copy { min-width: 44px; min-height: 44px; }
+body[data-chapter='layout'] .modal__values dd { min-width: 0; overflow-wrap: anywhere; font-size: 11px; }
+html[data-layout-vt] { view-transition-name: none; }
+::view-transition { pointer-events: none; }
+::view-transition-group(*) { animation-duration: 420ms; animation-timing-function: cubic-bezier(.2,.8,.2,1); }
+@media(max-width:1000px) { .l-height-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:540px) { .l-height-grid, .l-albums { grid-template-columns: minmax(0,1fr); }.l-albums button { display: grid; grid-template-columns: 72px minmax(0,1fr); align-items: center; }.l-albums .l-cover { grid-row: span 2; }.l-albums small { grid-column: 2; }.l-height-card h3 { min-height: 0; } }
+.no-js [data-first], .no-js [data-last] { display: none; }
+.no-js body[data-chapter='layout'] .quiz__why { grid-template-rows: 1fr; opacity: 1; }

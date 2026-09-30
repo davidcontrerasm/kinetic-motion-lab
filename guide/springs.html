@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en" class="no-js" data-motion="full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Springs &amp; physics — Kinetic field guide</title>
+  <meta name="description" content="Chapter 03 of the Kinetic field guide: stiffness, damping and mass, interruptible motion, damping regimes, momentum and snapping, rubber banding, gravity and chains of springs.">
+  <meta name="theme-color" content="#0a0a0d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0d'/%3E%3Cpath d='M16 7v18M8.2 11.5l15.6 9M8.2 20.5l15.6-9' stroke='%23ff5a36' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&amp;family=Space+Grotesk:wght@300..700&amp;display=swap">
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.remove('no-js');
+      root.classList.add('js');
+      try {
+        var stored = localStorage.getItem('kinetic:motion');
+        var reduced = stored ? stored === 'reduced' : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root.setAttribute('data-motion', reduced ? 'reduced' : 'full');
+      } catch (e) {}
+    })();
+  </script>
+  <script nomodule>document.documentElement.classList.add('no-module');</script>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/demos.css">
+  <link rel="stylesheet" href="../css/guide.css">
+  <link rel="stylesheet" href="../css/chapters/springs.css">
+  <script type="module" src="../js/guide.js"></script>
+</head>
+<body data-page="chapter" data-chapter="springs" style="--chapter: var(--mint)">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="cursor" data-cursor-root aria-hidden="true"><div class="cursor__ring"><div class="cursor__shape"></div><span class="cursor__label"></span></div><div class="cursor__dot"></div></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+  <header class="site-header site-header--guide" data-header>
+    <a class="brand" href="../index.html" data-magnetic="0.25">
+      <span class="brand__mark" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-asterisk"/></svg></span>
+      <span class="brand__word">Kinetic</span>
+      <span class="brand__tag">Field guide</span>
+    </a>
+    <nav class="nav" aria-label="Guide">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="../index.html"><span data-roll>Showcase</span></a></li>
+        <li><a class="nav__link" href="index.html" data-guide-link="guide-index"><span data-roll>Guide</span></a></li>
+        <li><button class="nav__link nav__link--menu" type="button" data-chapter-toggle aria-expanded="false" aria-controls="chapter-menu"><span>Chapters</span><svg class="icon nav__chevron" aria-hidden="true"><use href="../assets/icons.svg#i-chevron"/></svg></button></li>
+        <li><a class="nav__link" href="cheatsheet.html" data-guide-link="cheatsheet"><span data-roll>Cheat sheet</span></a></li>
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="true" title="Toggle motion (M)">
+        <span class="motion-toggle__track" aria-hidden="true"><span class="motion-toggle__thumb"></span></span>
+        <span class="motion-toggle__label">Motion <b data-motion-label>On</b></span>
+      </button>
+      <button class="burger" type="button" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu"><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="chapter-menu" id="chapter-menu" data-chapter-menu hidden><div class="chapter-menu__grid" data-chapter-grid></div></div>
+  <div class="mobile-menu mobile-menu--guide" id="mobile-menu" data-menu hidden>
+    <nav aria-label="Mobile"><ol class="mobile-menu__list" data-mobile-list></ol></nav>
+    <p class="mobile-menu__foot">Kinetic field guide</p>
+  </div>
+
+  <main id="main" class="guide">
+    <header class="chapter-hero">
+      <div>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Field guide</a><span aria-hidden="true">/</span><span>Chapter 03</span></nav>
+        <h1 class="chapter-hero__title" data-split>Springs &amp; physics</h1>
+        <p class="chapter-hero__lede">Durations are guesses about how long motion should take. Physics answers the question for you, and it keeps answering correctly when the user changes their mind halfway through. This chapter builds intuition for springs, momentum, friction and gravity, one demo at a time.</p>
+        <div class="chapter-hero__meta">
+          <span class="meta-chip"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-book"/></svg><b>7</b> lessons</span>
+          <span class="meta-chip"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-clock"/></svg><b>20</b> min</span>
+          <span class="meta-chip"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-check"/></svg><b data-chapter-percent>0%</b> studied</span>
+        </div>
+      </div>
+      <aside class="objectives" aria-label="Learning objectives">
+        <span class="objectives__title">You will learn to</span>
+        <ul>
+          <li>Tune springs with stiffness, damping and mass instead of milliseconds</li>
+          <li>Predict bounce from the damping ratio</li>
+          <li>Keep motion continuous when it is interrupted</li>
+          <li>Project momentum and snap by intent, not position</li>
+          <li>Build rubber bands, gravity and chains that stay stable</li>
+        </ul>
+      </aside>
+      <span class="chapter-hero__num" aria-hidden="true">03</span>
+    </header>
+
+    <div class="guide__layout">
+      <aside class="toc" aria-label="Lessons in this chapter">
+        <div class="toc__inner">
+          <span class="toc__title">In this chapter</span>
+          <div class="toc__track"><ol class="toc__list" data-toc-list></ol></div>
+          <div class="toc__progress"><b data-chapter-percent>0%</b> studied<div class="toc__bar"><span data-chapter-bar></span></div></div>
+        </div>
+      </aside>
+
+      <div class="guide__content">
+        <!-- 3.1 -->
+        <section class="lesson" id="anatomy" data-lesson data-toc="3.1">
+          <div class="lesson__head"><span class="lesson__num">3.1</span><h2 class="lesson__title">Anatomy of a spring</h2></div>
+          <div class="lesson__grid lesson__grid--stack">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">A spring has no duration. It has stiffness, damping and mass, and the duration falls out of the physics.</p>
+              <p>Hooke&rsquo;s law pulls the weight towards its resting point with a force proportional to the distance, <strong>&minus;k&middot;x</strong>. Damping resists motion with a force proportional to velocity, <strong>&minus;c&middot;v</strong>. Divide by the mass and you have the acceleration for the next instant.</p>
+              <code class="formula">a = (&minus;k&middot;x &minus; c&middot;v) / m &nbsp;&nbsp;&nbsp; &zeta; = c / (2&radic;(k&middot;m))</code>
+              <p><strong>Stiffness</strong> sets how hard the spring pulls: higher is snappier. <strong>Damping</strong> drains energy. Increasing <strong>mass at fixed k and c</strong> lowers the natural frequency, &omega;₀ = &radic;(k/m), but also lowers the damping ratio: the response becomes slower and relatively more oscillatory, not simply calmer. From a displaced, zero-velocity start, &zeta; below 1 oscillates, 1 is critical, and above 1 approaches without oscillating. A large initial velocity can still carry a critical or overdamped spring past its target.</p>
+              <p class="try"><b>Try it</b><span>Grab the weight and throw it. Then set damping to 0 and press Kick it: without damping it never stops. Finish with the Molasses preset to feel an overdamped spring.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="lab" data-spring-lab>
+                <div class="panel lab__stage" data-cursor-label="Drag">
+                  <canvas class="lab__canvas" data-spring-canvas tabindex="0" aria-label="Spring simulation. Drag the weight, or press the arrow keys to push it."></canvas>
+                  <div class="lab__readout" aria-live="polite">
+                    <span>&zeta; <b data-readout-zeta>0.45</b></span>
+                    <span class="lab__regime" data-readout-regime>Underdamped</span>
+                  </div>
+                </div>
+
+                <div class="panel lab__side">
+                  <div class="panel__head">
+                    <span class="panel__title">Presets</span>
+                    <span class="panel__hint">Classic spring configurations</span>
+                  </div>
+                  <div class="chips" role="group" aria-label="Spring presets" data-spring-presets>
+                    <button class="chip" type="button" data-spring-preset="default" aria-pressed="false">Default</button>
+                    <button class="chip" type="button" data-spring-preset="gentle" aria-pressed="false">Gentle</button>
+                    <button class="chip" type="button" data-spring-preset="wobbly" aria-pressed="true">Wobbly</button>
+                    <button class="chip" type="button" data-spring-preset="stiff" aria-pressed="false">Stiff</button>
+                    <button class="chip" type="button" data-spring-preset="slow" aria-pressed="false">Slow</button>
+                    <button class="chip" type="button" data-spring-preset="molasses" aria-pressed="false">Molasses</button>
+                  </div>
+
+                  <div class="controls">
+                    <label class="control">
+                      <span class="control__label">Stiffness <output data-param-out="stiffness">180</output></span>
+                      <input class="range" type="range" min="10" max="500" step="1" value="180" data-param="stiffness">
+                    </label>
+                    <label class="control">
+                      <span class="control__label">Damping <output data-param-out="damping">12</output></span>
+                      <input class="range" type="range" min="0" max="120" step="0.5" value="12" data-param="damping">
+                    </label>
+                    <label class="control">
+                      <span class="control__label">Mass <output data-param-out="mass">1</output></span>
+                      <input class="range" type="range" min="0.2" max="5" step="0.1" value="1" data-param="mass">
+                    </label>
+                  </div>
+
+                  <dl class="stats">
+                    <div><dt>Natural freq.</dt><dd data-readout-omega>13.4 rad/s</dd></div>
+                    <div><dt>Settles in</dt><dd data-readout-settle>0.94 s</dd></div>
+                  </dl>
+
+                  <div class="lab__graph-wrap">
+                    <div class="lab__legend"><span class="legend legend--x">x offset</span><span class="legend legend--y">y offset</span></div>
+                    <canvas class="lab__graph" data-spring-graph aria-hidden="true"></canvas>
+                  </div>
+
+                  <button class="btn btn--primary" type="button" data-spring-kick>
+                    <span>Kick it</span><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-arrow"/></svg>
+                  </button>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Tune springs with <strong>stiffness and damping</strong>, not milliseconds. The damping ratio &zeta; tells you whether it will bounce before you ever run it.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Inventing new spring values for every component. Define three or four presets (gentle, default, snappy, wobbly) and reuse them, exactly like easing tokens.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">JS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="js">// Semi-implicit Euler needs a small timestep relative to the spring frequency.
+// It is NOT unconditionally stable; substep stiff systems (e.g. dt = 1/240).
+function stepSpring(s, dt) {
+  const force = -s.stiffness * (s.value - s.target) - s.damping * s.velocity;
+  s.velocity += (force / s.mass) * dt;   // update velocity first...
+  s.value += s.velocity * dt;            // ...then position with the new velocity
+}
+
+// Kinetic's Spring uses the exact closed-form solution within each frame.
+// For a fixed target this avoids integration error. Moving targets are still
+// sampled per frame, and long frames are capped to avoid background jumps.
+const spring = new Spring({ stiffness: 180, damping: 12, mass: 1 });
+spring.target = 1;
+onFrame((dt) =&gt; render(spring.step(dt)));</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 3.2 -->
+        <section class="lesson" id="interrupt" data-lesson data-toc="3.2">
+          <div class="lesson__head"><span class="lesson__num">3.2</span><h2 class="lesson__title">Built for interruption</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">Interfaces are interrupted constantly: users tap again before the first animation has finished. Springs handle it gracefully; restarted tweens do not.</p>
+              <p>A tween is defined by a start, an end and a duration. This demo restarts a <strong>450ms cubic in-out</strong> tween from its current position. That particular curve starts at zero velocity and does not overshoot, so every retarget discards momentum. This is not a property of all tweens: a back curve can overshoot, and a velocity-aware interpolator can preserve the incoming slope.</p>
+              <p>A spring has no timeline to restart. Changing its target only changes the force acting on it, so its <strong>current velocity carries straight into the new motion</strong>. The path bends instead of breaking.</p>
+              <p class="try"><b>Try it</b><span>Click quickly at different points in the stage, or turn on Auto retarget. Watch the velocity traces: the tween&rsquo;s line snaps to zero at every change, while the spring&rsquo;s line stays continuous.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="interrupt">
+                <div class="stage__view">
+                  <div class="interrupt" data-interrupt-area tabindex="0" role="group" aria-label="Interruption test. Click or tap here to move the target, or use the left and right arrow keys.">
+                    <div class="lane lane--tween" data-lane="tween">
+                      <div class="lane__head"><span>Tween, restarted on change</span><small>450ms in-out</small></div>
+                      <div class="lane__track"><span class="lane__target"></span><span class="lane__ball"></span></div>
+                      <canvas aria-hidden="true"></canvas>
+                    </div>
+                    <div class="lane lane--spring" data-lane="spring">
+                      <div class="lane__head"><span>Spring, retargeted</span><small>k 170 &middot; c 20</small></div>
+                      <div class="lane__track"><span class="lane__target"></span><span class="lane__ball"></span></div>
+                      <canvas aria-hidden="true"></canvas>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage__bar">
+                  <button class="chip" type="button" data-auto aria-pressed="false">Auto retarget</button>
+                  <span class="stage__hint">Click the stage to move the target &middot; traces plot velocity</span>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Anything the user can interrupt (drags, toggles tapped twice, hover in and out) deserves <strong>velocity-preserving</strong> motion: springs, or tweens that start from the current velocity.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Assuming that reversing any CSS transition preserves velocity. Browsers have reversal-shortening rules, but the new velocity depends on the chosen easing and interruption point. Test rapid reversals rather than inferring continuity from the duration alone.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">JS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="js">// Tween: restarting from the current position throws velocity away.
+function retargetTween(target) {
+  tween = { from: currentX, to: target, start: performance.now(), duration: 450 };
+}
+
+// Spring: only the target changes; velocity carries into the new motion.
+function retargetSpring(target) {
+  spring.target = target;
+}
+
+onFrame((dt) =&gt; {
+  spring.step(dt);
+  ball.style.transform = `translateX(${spring.value}px)`;
+});</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <section class="lesson" id="regimes" data-lesson data-toc="3.3">
+          <div class="lesson__head"><span class="lesson__num">3.3</span><h2 class="lesson__title">Three ways to come to rest</h2></div>
+          <div class="lesson__grid lesson__grid--stack">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">Damping is a relationship, not a magic number. Release three identical masses from rest and only change the damping ratio.</p>
+              <p>Below &zeta; = 1, the system trades kinetic and spring energy several times before damping removes it: the trace crosses the dashed target. At &zeta; = 1, the two characteristic decay rates meet. Above 1, one slow decay dominates, so adding damping can actually make the last part of the journey take longer.</p>
+              <p><strong>Critical damping is the fastest nonoscillatory return for the typical displaced, zero-velocity start at fixed stiffness and mass.</strong> It is not a promise that every release avoids overshoot. A strong incoming throw changes the initial conditions. The times below measure when position stays within 2% of the travel; a production spring should also check velocity before sleeping.</p>
+              <p class="try"><b>Try it</b><span>Release all three. Identify the first target crossing, then compare the critical and overdamped tails. With motion off, read the complete traces instead of watching the balls.</span></p>
+            </div>
+            <figure class="lesson__demo"><div class="stage" data-demo="regimes">
+              <div class="stage__view regimes">
+                <div class="regime regime--under" data-zeta="0.35"><span class="regime__name">Under</span><div class="regime__meta"><span>&zeta; <b>0.35</b> · c <b data-damping></b></span><span>2% settling <b data-settle></b></span></div><div class="regime__track" aria-hidden="true"><span class="regime__rest"></span><span class="regime__ball"></span></div><svg viewBox="0 0 100 58" role="img" aria-label="Underdamped position over 2.4 seconds: overshoots and oscillates"><line class="regime__rest-line" x1="0" x2="100"/><path class="regime__trace"/></svg></div>
+                <div class="regime regime--critical" data-zeta="1"><span class="regime__name">Critical</span><div class="regime__meta"><span>&zeta; <b>1.00</b> · c <b data-damping></b></span><span>2% settling <b data-settle></b></span></div><div class="regime__track" aria-hidden="true"><span class="regime__rest"></span><span class="regime__ball"></span></div><svg viewBox="0 0 100 58" role="img" aria-label="Critical position over 2.4 seconds: direct return from rest"><line class="regime__rest-line" x1="0" x2="100"/><path class="regime__trace"/></svg></div>
+                <div class="regime regime--over" data-zeta="2"><span class="regime__name">Over</span><div class="regime__meta"><span>&zeta; <b>2.00</b> · c <b data-damping></b></span><span>2% settling <b data-settle></b></span></div><div class="regime__track" aria-hidden="true"><span class="regime__rest"></span><span class="regime__ball"></span></div><svg viewBox="0 0 100 58" role="img" aria-label="Overdamped position over 2.4 seconds: slow nonoscillatory tail"><line class="regime__rest-line" x1="0" x2="100"/><path class="regime__trace"/></svg></div>
+              </div><div class="stage__bar"><button class="btn btn--small btn--primary" type="button" data-play>Release all three</button><span class="stage__hint">k 170 · m 1 · initial velocity 0 · graphs: position / time</span></div>
+            </div></figure>
+          </div>
+          <div class="lesson__notes"><aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Choose the <strong>regime</strong> before tuning the feel. Critical is a useful baseline for precise controls; underdamping communicates elasticity, and overdamping can communicate resistance.</p></aside><aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Increasing damping indefinitely to make something faster. Past critical, more damping produces a longer tail. Initial velocity also matters.</p></aside><details class="snippet"><summary><span class="snippet__label">How it’s built</span><span class="snippet__lang">JS</span></summary><div class="snippet__body"><pre><code data-lang="js">const stiffness = 170, mass = 1;
+const criticalDamping = 2 * Math.sqrt(stiffness * mass);
+const damping = zeta * criticalDamping;
+const position = springPosition(time, {
+  stiffness, damping, mass, from: 0, to: 1, velocity: 0,
+}); // sample the same initial conditions for every trace</code></pre></div></details></div>
+        </section>
+
+        <section class="lesson" id="momentum" data-lesson data-toc="3.4">
+          <div class="lesson__head"><span class="lesson__num">3.4</span><h2 class="lesson__title">Snap where the throw is going</h2></div>
+          <div class="lesson__grid"><div class="lesson__text prose">
+            <p class="lesson__lede">A release position describes where the finger was. Release velocity describes what the person meant to do next.</p>
+            <p>For exponential friction, velocity decays as v₀e<sup>−kt</sup>. Integrating that curve gives a projected resting position, <strong>x + v/k</strong>. Higher friction shortens the throw. The dashed marker is that free-decay estimate, clamped to the stage; a wall collision changes the subsequent path.</p>
+            <p>With snapping enabled, choose the target nearest the projected rest, then hand current position and velocity to a spring. This makes a fast flick pass the midpoint without demanding a long drag. The estimate is not a timer, and the spring’s settling time is not the friction model’s stopping time.</p>
+            <p class="try"><b>Try it</b><span>Throw the puck gently, then flick it from almost the same position. Enable snapping and compare destinations. Focus the puck and use arrows for equivalent throws; Escape cancels a grab.</span></p>
+          </div><figure class="lesson__demo"><div class="stage" data-demo="fling"><div class="stage__view"><div class="fling" data-fling-stage><span class="fling__target" data-target aria-hidden="true"></span><span class="fling__target" data-target aria-hidden="true"></span><span class="fling__target" data-target aria-hidden="true"></span><span class="fling__ring" data-projection aria-hidden="true"></span><button class="fling__puck" type="button" data-puck aria-label="Throwable puck. Drag, or use arrow keys. Escape cancels."></button></div></div><div class="stage__bar"><label class="control control--grow"><span class="control__label">Friction <output data-friction-out>4.0</output></span><input class="range" type="range" min="1" max="10" step="0.5" value="4" data-friction></label><button class="chip" type="button" data-snap aria-pressed="false">Projected snap</button><button class="chip" type="button" data-reset>Reset puck</button><p class="readout" data-fling-readout></p></div></div></figure></div>
+          <div class="lesson__notes"><aside class="callout callout--key"><span class="callout__label">Key idea</span><p><strong>Project first, select second, settle third.</strong> Intent selection and the motion that reaches the destination are separate decisions.</p></aside><aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Using the last pointer delta as velocity. A tiny pause or a sparse event can dominate it. Sample a short recent window, cap the result, and discard momentum on cancellation.</p></aside><details class="snippet"><summary><span class="snippet__label">How it’s built</span><span class="snippet__lang">JS</span></summary><div class="snippet__body"><pre><code data-lang="js">const projectedX = x + velocity / friction;
+const destination = nearest(projectedX, targets);
+spring.value = x;
+spring.velocity = velocity; // preserve the throw
+spring.target = destination;
+// Reduced motion: set the destination directly instead of coasting.
+if (motion.reduced) spring.set(destination);</code></pre></div></details></div>
+        </section>
+
+        <section class="lesson" id="rubber-band" data-lesson data-toc="3.5">
+          <div class="lesson__head"><span class="lesson__num">3.5</span><h2 class="lesson__title">Make a boundary feel like a boundary</h2></div>
+          <div class="lesson__grid"><div class="lesson__text prose">
+            <p class="lesson__lede">Rubber banding acknowledges a pull without pretending there is more content beyond the edge.</p>
+            <p>Inside the list, finger travel maps to content travel one-to-one. Outside it, a bounded function compresses the excess displacement. Here f(x) = sign(x) · d · (1 − 1/(1 + 0.55|x|/d)), with viewport height d. Its initial slope is 0.55, not 1, and the resistance increases as the pull grows.</p>
+            <p>On release, the boundary becomes a spring target. On regrab, invert the resistance mapping before adding new pointer travel; otherwise the already-compressed display position is compressed a second time. Turning the effect off must clamp immediately, zero velocity and reanchor an active drag. Motion reduction removes the animated return and inertia, not the ability to move through the list.</p>
+            <p class="try"><b>Try it</b><span>Pull down at the top, release, and grab again before the return finishes. Toggle rubber banding off during a pull. Focus the list and use Up, Down, Home and End.</span></p>
+          </div><figure class="lesson__demo"><div class="stage" data-demo="rubber"><div class="stage__view rb-layout"><div class="phone"><div class="phone__screen"><div class="rb-viewport" data-rb-viewport tabindex="0" role="group" aria-label="Reading list. Drag to scroll, or use arrows, Home and End."><div class="rb-list" data-rb-list><h3 class="rb-list__title">Weekend reading</h3><div class="rb-row" style="--h:160"><i aria-hidden="true"></i><span><b>Motion as material</b><small>6 min · Design</small></span></div><div class="rb-row" style="--h:45"><i aria-hidden="true"></i><span><b>A quieter interface</b><small>4 min · Accessibility</small></span></div><div class="rb-row" style="--h:260"><i aria-hidden="true"></i><span><b>Following intent</b><small>8 min · Gestures</small></span></div><div class="rb-row" style="--h:20"><i aria-hidden="true"></i><span><b>Useful friction</b><small>5 min · Physics</small></span></div><div class="rb-row" style="--h:190"><i aria-hidden="true"></i><span><b>Small promises</b><small>3 min · Feedback</small></span></div><div class="rb-row" style="--h:90"><i aria-hidden="true"></i><span><b>Time to settle</b><small>7 min · Springs</small></span></div><div class="rb-row" style="--h:330"><i aria-hidden="true"></i><span><b>Making room</b><small>6 min · Layout</small></span></div><div class="rb-row" style="--h:210"><i aria-hidden="true"></i><span><b>The final frame</b><small>4 min · Craft</small></span></div></div></div></div></div><div class="rb-side"><span class="pane-label">A bounded response</span><p class="readout" data-rb-readout>Pull past either edge.</p><p class="readout">The content is real; scrolling is simulated locally to expose the resistance mapping.</p></div></div><div class="stage__bar"><button class="chip" type="button" data-rb-toggle aria-pressed="true">Rubber banding</button><span class="stage__hint">Escape cancels · reduced motion returns directly</span></div></div></figure></div>
+          <div class="lesson__notes"><aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Keep <strong>raw input, rendered displacement and legal bounds</strong> distinct. Each has a different job in a continuous gesture.</p></aside><aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Reusing the rendered overscroll as raw input after interruption. That causes a jump on the first move, even when the pointer barely moves.</p></aside><details class="snippet"><summary><span class="snippet__label">How it’s built</span><span class="snippet__lang">JS</span></summary><div class="snippet__body"><pre><code data-lang="js">// Recover raw excess from displayed excess when regrabbing.
+const rawExcess = shown * height / (0.55 * (height - Math.abs(shown)));
+// Disabling resistance is a state change, not another spring target.
+offset = clamp(offset, minOffset, 0);
+velocity = 0;
+spring.set(offset);
+drag.startY = drag.currentY;
+drag.startRaw = offset;</code></pre></div></details></div>
+        </section>
+
+        <section class="lesson" id="gravity" data-lesson data-toc="3.6">
+          <div class="lesson__head"><span class="lesson__num">3.6</span><h2 class="lesson__title">Collisions spend energy</h2></div>
+          <div class="lesson__grid"><div class="lesson__text prose">
+            <p class="lesson__lede">Gravity accelerates a ball; restitution decides how much of its incoming normal velocity survives the impact.</p>
+            <p>A floor collision uses v′ = −ev. At e = 0, normal motion is lost; near 1, it is mostly returned. The fraction of normal kinetic energy retained is e², not e. Circle collisions share an impulse according to inverse mass, after separating overlaps along the collision normal.</p>
+            <p>This small teaching solver advances at 120Hz with capped catch-up time. Coincident centers need a deterministic nonzero normal, and overlap correction must be followed by boundary clamping. Squash is only a brief drawing transform: it never changes the collision radius. Stacks can keep exchanging tiny impulses; use Pause to stop them explicitly. The simulation also pauses out of view and in hidden tabs. Reduced motion places balls in a static arrangement.</p>
+            <p class="try"><b>Try it</b><span>Drop several balls at the same spot. Compare restitution 0.2 and 0.85, then pause a collision. Focus the canvas and press Enter or Space to drop; Clear removes every ball.</span></p>
+          </div><figure class="lesson__demo"><div class="stage" data-demo="gravity"><div class="stage__view"><canvas class="physics-canvas" data-gravity-canvas tabindex="0" aria-label="Gravity playground. Click to drop a ball, or press Enter or Space."></canvas></div><div class="stage__bar"><label class="control control--grow"><span class="control__label">Restitution <output data-restitution-out>0.72</output></span><input class="range" type="range" min="0" max="0.95" step="0.01" value="0.72" data-restitution></label><button class="chip" type="button" data-pause aria-pressed="false">Pause</button><button class="chip" type="button" data-clear>Clear</button><span class="readout"><b data-ball-count>0</b> / 14 balls</span><span class="readout" data-gravity-status role="status">Ready</span></div></div></figure></div>
+          <div class="lesson__notes"><aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Separate <strong>simulation geometry from visual deformation</strong>. A squash can sell the impact without destabilizing the solver.</p></aside><aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Dividing a zero center-distance by a tiny substitute but leaving both normal components zero. Nothing separates. Pick a deterministic axis when centers coincide.</p></aside><details class="snippet"><summary><span class="snippet__label">How it’s built</span><span class="snippet__lang">JS</span></summary><div class="snippet__body"><pre><code data-lang="js">const distance = Math.hypot(dx, dy);
+const nx = distance &gt; 0.0001 ? dx / distance : 1;
+const ny = distance &gt; 0.0001 ? dy / distance : 0;
+const vn = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+if (vn &lt; 0) {
+  const impulse = -(1 + restitution) * vn / (1 / a.mass + 1 / b.mass);
+  a.vx -= impulse * nx / a.mass;
+  b.vx += impulse * nx / b.mass;
+  a.vy -= impulse * ny / a.mass;
+  b.vy += impulse * ny / b.mass;
+} // separate overlaps and clamp both circles back inside the world too</code></pre></div></details></div>
+        </section>
+
+        <section class="lesson" id="chain" data-lesson data-toc="3.7">
+          <div class="lesson__head"><span class="lesson__num">3.7</span><h2 class="lesson__title">Pass the motion downstream</h2></div>
+          <div class="lesson__grid"><div class="lesson__text prose">
+            <p class="lesson__lede">One spring follows the pointer. The next follows the first spring. Twelve links turn a single input into a flowing trail.</p>
+            <p>Every link owns position and velocity in two axes. It targets the preceding link’s current position, not the original pointer position; this is what creates phase lag down the chain. Higher stiffness transmits a change quickly, while low damping allows waves of overshoot to travel behind it.</p>
+            <p>This is a one-way follower chain, not a rope with distance constraints or equal-and-opposite forces. We substep the coupled updates so the tail is less dependent on display rate. The trail sleeps when settled; there is no idle sine animation. With reduced motion, the head tracks direct input and the links form a static, compact trail. Keyboard arrows move the same target.</p>
+            <p class="try"><b>Try it</b><span>Draw a sharp corner, stop, and watch the tail catch up. Increase damping to remove the ripples. Focus the canvas and trace a square with the arrow keys; Home recenters it.</span></p>
+          </div><figure class="lesson__demo"><div class="stage" data-demo="chain"><div class="stage__view"><canvas class="physics-canvas physics-canvas--chain" data-chain-canvas tabindex="0" aria-label="Twelve spring followers. Move the pointer or use arrow keys; Home recenters."></canvas></div><div class="stage__bar"><label class="control control--grow"><span class="control__label">Stiffness <output data-chain-stiffness-out>180</output></span><input class="range" type="range" min="40" max="400" value="180" data-chain-stiffness></label><label class="control control--grow"><span class="control__label">Damping <output data-chain-damping-out>18.0</output></span><input class="range" type="range" min="8" max="60" step="0.5" value="18" data-chain-damping></label><span class="stage__hint">12 followers · pointer and keyboard · no autonomous idle cycle</span></div></div></figure></div>
+          <div class="lesson__notes"><aside class="callout callout--key"><span class="callout__label">Key idea</span><p><strong>Local rules create a global gesture.</strong> Follow a neighbor when you want propagation; follow the same target when you want coordinated arrival.</p></aside><aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Calling a decorative follower chain a physically accurate rope. Constraints, collisions and bidirectional forces require a different model.</p></aside><details class="snippet"><summary><span class="snippet__label">How it’s built</span><span class="snippet__lang">JS</span></summary><div class="snippet__body"><pre><code data-lang="js">// Repeat with small substeps for a moving, coupled target.
+links.forEach((link, i) =&gt; {
+  const leader = i === 0 ? pointer : links[i - 1];
+  link.x.target = i === 0 ? leader.x : leader.x.value;
+  link.y.target = i === 0 ? leader.y : leader.y.value;
+  link.x.step(dt);
+  link.y.step(dt);
+});
+if (links.every(link =&gt; link.x.isSettled() &amp;&amp; link.y.isSettled())) loop.stop();</code></pre></div></details></div>
+        </section>
+
+        <section class="summary" id="summary" data-toc="★" aria-labelledby="summary-title"><div class="summary__grid"><div><span class="section-label">Chapter recap</span><h2 class="summary__title" id="summary-title">What to remember</h2><ol class="takeaways"><li><span><strong>Tune relationships.</strong> Mass changes both natural frequency and damping ratio when k and c stay fixed.</span></li><li><span><strong>Preserve velocity on retarget.</strong> Cancellation is different: discard the throw and restore a legal state.</span></li><li><span><strong>Project intent before snapping.</strong> A destination choice is separate from the spring that reaches it.</span></li><li><span><strong>Keep raw and rendered input distinct.</strong> Invert resistance on regrab and reanchor when bounds change.</span></li><li><span><strong>Budget numerical work.</strong> Small fixed steps, deterministic collision normals and post-correction clamps prevent common failures.</span></li><li><span><strong>Provide static equivalents and a way to stop.</strong> Reduced motion still permits direct manipulation and meaningful results.</span></li></ol></div><div class="quiz" data-quiz><div class="quiz__head"><span class="quiz__title">Check yourself</span><span class="quiz__score"><span data-quiz-score>0</span>/ 3</span></div><div class="quiz__q" data-answer="1"><p class="quiz__prompt">At fixed stiffness and damping, increasing mass does what?</p><div class="quiz__options"><button class="quiz__opt" type="button"><span>Slows frequency and raises damping ratio</span></button><button class="quiz__opt" type="button"><span>Slows frequency and lowers damping ratio</span></button><button class="quiz__opt" type="button"><span>Changes duration only</span></button></div><div class="quiz__why"><p>Both &radic;(k/m) and c/(2&radic;(km)) decrease. Slower does not necessarily mean less oscillatory.</p></div></div><div class="quiz__q" data-answer="0"><p class="quiz__prompt">A spring is retargeted mid-flight. What should be retained?</p><div class="quiz__options"><button class="quiz__opt" type="button"><span>Current position and velocity</span></button><button class="quiz__opt" type="button"><span>Only the old duration</span></button><button class="quiz__opt" type="button"><span>Only the old target</span></button></div><div class="quiz__why"><p>The new target changes acceleration, not the current state. Keeping velocity avoids an artificial stop.</p></div></div><div class="quiz__q" data-answer="2"><p class="quiz__prompt">Rubber banding is disabled during overscroll. What is truthful?</p><div class="quiz__options"><button class="quiz__opt" type="button"><span>Finish the old spring first</span></button><button class="quiz__opt" type="button"><span>Keep the old raw anchor unchanged</span></button><button class="quiz__opt" type="button"><span>Clamp, zero velocity and reanchor the drag</span></button></div><div class="quiz__why"><p>The off state must already obey hard bounds. Reanchoring prevents a jump on the next pointer move.</p></div></div><div class="quiz__foot"><p class="quiz__result" data-quiz-result hidden></p><button class="btn btn--small" type="button" data-quiz-retry hidden>Try again</button></div></div></div><div class="complete"><button class="complete__btn" type="button" data-complete aria-pressed="false"><span class="complete__box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span data-complete-label>Mark chapter as studied</span></button></div></section>
+
+        <nav class="chapter-nav" data-chapter-nav aria-label="Chapter navigation"></nav>
+      </div>
+    </div>
+  </main>
+
+  <footer class="guide-footer">
+    <div class="guide-footer__inner">
+      <span>© 2026 Kinetic · Field guide</span>
+      <span class="guide-footer__links"><a href="../index.html">Showcase</a><a href="index.html">Guide home</a><a href="cheatsheet.html">Cheat sheet</a></span>
+      <span>Press <kbd>M</kbd> to toggle motion</span>
+    </div>
+  </footer>
+</body>
+</html>

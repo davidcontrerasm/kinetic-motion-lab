@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en" class="no-js" data-motion="full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Cheat sheet &amp; glossary — Kinetic field guide</title>
+  <meta name="description" content="Motion design reference: duration scale, easing tokens, spring presets, the rendering cost of animatable properties, choreography rules, a ship checklist and a searchable glossary.">
+  <meta name="theme-color" content="#0a0a0d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0d'/%3E%3Cpath d='M16 7v18M8.2 11.5l15.6 9M8.2 20.5l15.6-9' stroke='%23ff5a36' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&amp;family=Space+Grotesk:wght@300..700&amp;display=swap">
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.remove('no-js');
+      root.classList.add('js');
+      try {
+        var stored = localStorage.getItem('kinetic:motion');
+        var reduced = stored ? stored === 'reduced' : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root.setAttribute('data-motion', reduced ? 'reduced' : 'full');
+      } catch (e) {}
+    })();
+  </script>
+  <script nomodule>document.documentElement.classList.add('no-module');</script>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/demos.css">
+  <link rel="stylesheet" href="../css/guide.css">
+  <script type="module" src="../js/guide.js"></script>
+</head>
+<body data-page="cheatsheet" data-module="cheatsheet" style="--chapter:var(--lime)">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="cursor" data-cursor-root aria-hidden="true"><div class="cursor__ring"><div class="cursor__shape"></div><span class="cursor__label"></span></div><div class="cursor__dot"></div></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+  <header class="site-header site-header--guide" data-header>
+    <a class="brand" href="../index.html" data-magnetic="0.25">
+      <span class="brand__mark" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-asterisk"/></svg></span>
+      <span class="brand__word">Kinetic</span>
+      <span class="brand__tag">Field guide</span>
+    </a>
+    <nav class="nav" aria-label="Guide">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="../index.html"><span data-roll>Showcase</span></a></li>
+        <li><a class="nav__link" href="index.html" data-guide-link="guide-index"><span data-roll>Guide</span></a></li>
+        <li><button class="nav__link nav__link--menu" type="button" data-chapter-toggle aria-expanded="false" aria-controls="chapter-menu"><span>Chapters</span><svg class="icon nav__chevron" aria-hidden="true"><use href="../assets/icons.svg#i-chevron"/></svg></button></li>
+        <li><a class="nav__link" href="cheatsheet.html" data-guide-link="cheatsheet"><span data-roll>Cheat sheet</span></a></li>
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="true" title="Toggle motion (M)">
+        <span class="motion-toggle__track" aria-hidden="true"><span class="motion-toggle__thumb"></span></span>
+        <span class="motion-toggle__label">Motion <b data-motion-label>On</b></span>
+      </button>
+      <button class="burger" type="button" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu"><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="chapter-menu" id="chapter-menu" data-chapter-menu hidden><div class="chapter-menu__grid" data-chapter-grid></div></div>
+  <div class="mobile-menu mobile-menu--guide" id="mobile-menu" data-menu hidden>
+    <nav aria-label="Mobile"><ol class="mobile-menu__list" data-mobile-list></ol></nav>
+    <p class="mobile-menu__foot">Kinetic field guide</p>
+  </div>
+
+  <main id="main" class="guide">
+    <header class="chapter-hero">
+      <div>
+        <div class="crumbs"><a href="index.html">Field guide</a><span>/</span><span>Reference</span></div>
+        <h1 class="chapter-hero__title" data-split>Cheat sheet &amp; glossary</h1>
+        <p class="chapter-hero__lede">The numbers, curves and rules from all nine chapters on one page, plus a checklist to run before you ship and a glossary you can search. Hover a duration row to feel it.</p>
+        <div class="chapter-hero__meta">
+          <span class="meta-chip"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-layers"/></svg><b>7</b> sections</span>
+          <span class="meta-chip"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-book"/></svg><b>36</b> terms</span>
+        </div>
+      </div>
+      <aside class="objectives">
+        <span class="objectives__title">Use this page to</span>
+        <ul>
+          <li>Pick a duration and curve in seconds, not minutes</li>
+          <li>Choose a spring preset by feel and by settle time</li>
+          <li>Know which properties are cheap to animate</li>
+          <li>Review a feature against a shipping checklist</li>
+        </ul>
+      </aside>
+      <span class="chapter-hero__num" aria-hidden="true">Ref</span>
+    </header>
+
+    <div class="guide__layout">
+      <aside class="toc" aria-label="Sections">
+        <div class="toc__inner">
+          <span class="toc__title">On this page</span>
+          <div class="toc__track"><ol class="toc__list" data-toc-list></ol></div>
+        </div>
+      </aside>
+
+      <div class="guide__content">
+        <section class="ref" id="durations" data-toc="R1">
+          <h2 class="ref__title">Duration scale</h2>
+          <p class="ref__lede">These tokens are starting heuristics, not universal perceptual thresholds. Tune for distance, size, frequency, task and user needs. Exits often run at roughly two thirds of the matching entrance. Hover a row to see the duration.</p>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Change</th><th>Duration</th><th>Easing</th><th>Feel</th></tr></thead>
+              <tbody>
+                <tr><td>Hover, press, focus feedback</td><td><code>80–150ms</code></td><td><code>ease-out</code></td><td><span class="duration-bar" style="--d:0.12s"><span></span></span></td></tr>
+                <tr><td>Small component: toggle, checkbox, chip</td><td><code>150–250ms</code></td><td>ease-out or spring</td><td><span class="duration-bar" style="--d:0.2s"><span></span></span></td></tr>
+                <tr><td>Medium: dropdown, tooltip, card expand</td><td><code>250–400ms</code></td><td><code>standard</code></td><td><span class="duration-bar" style="--d:0.32s"><span></span></span></td></tr>
+                <tr><td>Large: modal, drawer, sheet</td><td><code>350–550ms</code></td><td><code>emphasized</code></td><td><span class="duration-bar" style="--d:0.45s"><span></span></span></td></tr>
+                <tr><td>Page transition, big choreography</td><td><code>500–900ms</code></td><td><code>emphasized</code></td><td><span class="duration-bar" style="--d:0.7s"><span></span></span></td></tr>
+                <tr><td>Exits of any size</td><td><code>≈ 0.65 × entrance</code></td><td><code>ease-in</code></td><td><span class="duration-bar" style="--d:0.2s"><span></span></span></td></tr>
+                <tr><td>Stagger between items</td><td><code>20–60ms each</code></td><td>same as items</td><td>cap the total near 400ms</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="ref" id="easing" data-toc="R2">
+          <h2 class="ref__title">Easing tokens</h2>
+          <p class="ref__lede">A handful of named curves covers almost every case. Name them once in CSS custom properties and reuse them everywhere so the product moves with one voice.</p>
+          <div class="token-grid" data-token-grid>
+            <article class="token-card" data-curve="0.2,0,0,1"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"></svg><h3>Standard</h3><code>cubic-bezier(0.2, 0, 0, 1)</code><p>Most on-screen movement from A to B.</p></article>
+            <article class="token-card" data-curve="0.05,0.7,0.1,1"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"></svg><h3>Enter (decelerate)</h3><code>cubic-bezier(0.05, 0.7, 0.1, 1)</code><p>Things arriving: they rush in and settle gently.</p></article>
+            <article class="token-card" data-curve="0.3,0,0.8,0.15"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"></svg><h3>Exit (accelerate)</h3><code>cubic-bezier(0.3, 0, 0.8, 0.15)</code><p>Things leaving: a gentle start, then out of the way.</p></article>
+            <article class="token-card" data-curve="0.16,1,0.3,1"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"></svg><h3>Emphasized</h3><code>cubic-bezier(0.16, 1, 0.3, 1)</code><p>Hero moments and big reveals; long, luxurious tail.</p></article>
+            <article class="token-card" data-curve="0.34,1.56,0.64,1"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"></svg><h3>Overshoot</h3><code>cubic-bezier(0.34, 1.56, 0.64, 1)</code><p>Playful pops on small elements. Never on large surfaces.</p></article>
+            <article class="token-card" data-curve="0.65,0,0.35,1"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"></svg><h3>In-out</h3><code>cubic-bezier(0.65, 0, 0.35, 1)</code><p>Loops, pendulums and moves that start and end on screen.</p></article>
+            <article class="token-card" data-curve="0,0,1,1"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"></svg><h3>Linear</h3><code>linear</code><p>Progress bars, spinners, marquees: mechanical on purpose.</p></article>
+            <article class="token-card" data-steps="5"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"></svg><h3>Steps</h3><code>steps(5, jump-end)</code><p>Ticks, typewriters and sprite sheets.</p></article>
+          </div>
+        </section>
+
+        <section class="ref" id="springs" data-toc="R3">
+          <h2 class="ref__title">Spring presets</h2>
+          <p class="ref__lede">Springs trade duration for physical parameters. The curves below are computed from the same solver the demos use; settle time is the moment the spring stays within 1% of its target.</p>
+          <div class="preset-grid" data-preset-grid></div>
+        </section>
+
+        <section class="ref" id="cost" data-toc="R4">
+          <h2 class="ref__title">What properties cost</h2>
+          <p class="ref__lede">Every frame the browser may recalculate style, lay out boxes, paint pixels and composite layers. These are typical paths, not guaranteed GPU promotion or fixed costs. Browser implementation, surface area, rasterization, layers and surrounding content matter; inspect a performance trace.</p>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Property</th><th>Typical path</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td><code>transform</code></td><td><span class="cost cost--composite">Composite</span></td><td>Move, scale, rotate. Can run off the main thread.</td></tr>
+                <tr><td><code>opacity</code></td><td><span class="cost cost--composite">Composite</span></td><td>Fades and crossfades. Pairs with transform for almost everything.</td></tr>
+                <tr><td><code>filter</code>, <code>backdrop-filter</code></td><td><span class="cost cost--paint">Paint / composite</span></td><td>Implementation-dependent; blur radius, area and changing backdrops can increase rasterization cost.</td></tr>
+                <tr><td><code>color</code>, <code>background</code>, <code>box-shadow</code></td><td><span class="cost cost--paint">Paint</span></td><td>Fine on small elements. Fake big shadows with an opacity-animated layer.</td></tr>
+                <tr><td><code>clip-path</code></td><td><span class="cost cost--paint">Paint / composite</span></td><td>Shape and browser support affect the path; profile large reveals.</td></tr>
+                <tr><td><code>width</code>, <code>height</code>, <code>padding</code>, <code>margin</code></td><td><span class="cost cost--layout">Layout</span></td><td>Can require layout and paint. FLIP can avoid per-frame layout; grid-track height transitions still reflow siblings.</td></tr>
+                <tr><td><code>top</code>, <code>left</code>, <code>font-size</code></td><td><span class="cost cost--layout">Layout</span></td><td>Use <code>transform</code> instead of positional offsets.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="ref" id="rules" data-toc="R5">
+          <h2 class="ref__title">Choreography rules</h2>
+          <p class="ref__lede">Eight rules of thumb distilled from the chapters. Break them deliberately, never by accident.</p>
+          <ol class="rules">
+            <li><strong>Motion has a job</strong>Every animation should explain, confirm or direct. If it does none, cut it.</li>
+            <li><strong>Feedback within 100ms</strong>Acknowledge input immediately, even when the work takes longer.</li>
+            <li><strong>Enter slow, leave fast</strong>Arrivals decelerate; departures accelerate and take about two thirds of the time.</li>
+            <li><strong>One lead at a time</strong>A single primary motion per moment; everything else supports or waits.</li>
+            <li><strong>Stagger small, cap the total</strong>20–60ms per item and a ceiling for the group, so long lists never drag.</li>
+            <li><strong>Keep objects continuous</strong>Nothing teleports: animate from where things were to where they are.</li>
+            <li><strong>Stay interruptible</strong>Users change their minds. Retarget from the current position and velocity.</li>
+            <li><strong>Respect the setting</strong>Honour reduced motion with immediate static states or optional short fades, not by deleting feedback.</li>
+          </ol>
+        </section>
+
+        <section class="ref" id="checklist" data-toc="R6">
+          <h2 class="ref__title">Ship checklist</h2>
+          <p class="ref__lede">Run a feature through this before release. Ticks are saved in this browser.</p>
+          <ul class="checklist-ref" data-ship-checklist>
+            <li><label class="check"><input type="checkbox" value="reduced"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Reduced motion removes large travel while preserving static feedback; short fades are optional</span></label></li>
+            <li><label class="check"><input type="checkbox" value="composite"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Only transform and opacity animate on large or frequent elements</span></label></li>
+            <li><label class="check"><input type="checkbox" value="feedback"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Every input gets visible feedback within 100ms</span></label></li>
+            <li><label class="check"><input type="checkbox" value="interrupt"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Animations can be interrupted and reversed without jumping</span></label></li>
+            <li><label class="check"><input type="checkbox" value="tokens"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Durations and curves come from shared tokens</span></label></li>
+            <li><label class="check"><input type="checkbox" value="exits"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Exits are faster than entrances</span></label></li>
+            <li><label class="check"><input type="checkbox" value="loops"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Looping motion near content can be paused and stops off screen</span></label></li>
+            <li><label class="check"><input type="checkbox" value="focus"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Keyboard focus stays visible and never animates away</span></label></li>
+            <li><label class="check"><input type="checkbox" value="device"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Tested on a low-end phone with CPU throttling</span></label></li>
+            <li><label class="check"><input type="checkbox" value="purpose"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Each animation explains, confirms or directs attention</span></label></li>
+          </ul>
+          <div class="checklist-ref__meta">
+            <span class="readout"><b data-ship-count>0</b> of 10 checked</span>
+            <button class="btn btn--small" type="button" data-ship-reset>Clear</button>
+          </div>
+        </section>
+
+        <section class="ref" id="glossary" data-toc="R7">
+          <h2 class="ref__title">Glossary</h2>
+          <p class="ref__lede">Type to filter. Matches highlight in both the term and its definition.</p>
+          <label class="glossary-search">
+            <svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-search"/></svg>
+            <input type="search" placeholder="Search terms, e.g. damping" aria-label="Search the glossary" data-glossary-search>
+            <output data-glossary-count>36 terms</output>
+          </label>
+          <dl class="glossary" data-glossary>
+            <div class="glossary__item"><dt>Anticipation</dt><dd>A small movement opposite to the main action that prepares the viewer for it, like a wind-up before a throw.</dd></div>
+            <div class="glossary__item"><dt>Choreography</dt><dd>The coordinated timing of several elements so they read as one gesture rather than a crowd.</dd></div>
+            <div class="glossary__item"><dt>Compositor</dt><dd>The browser thread that assembles painted layers on the GPU. Transform and opacity animations can run there without the main thread.</dd></div>
+            <div class="glossary__item"><dt>Critical damping</dt><dd>A damping ratio of exactly 1. For fixed stiffness k and mass m, released from displacement with zero initial velocity, it is the fastest non-oscillatory return among critically damped and overdamped responses. Other initial velocities can cross the target.</dd></div>
+            <div class="glossary__item"><dt>cubic-bezier()</dt><dd>A CSS timing function defined by two control points. The x axis is time, the y axis is progress; y outside 0–1 means overshoot or anticipation.</dd></div>
+            <div class="glossary__item"><dt>Damping ratio (ζ)</dt><dd>c / (2√(k·m)). Below 1 a spring oscillates, at 1 it is critical, above 1 it creeps to rest.</dd></div>
+            <div class="glossary__item"><dt>Duration token</dt><dd>A named duration such as --dur-short: 200ms, so timing stays consistent across a whole product.</dd></div>
+            <div class="glossary__item"><dt>Easing</dt><dd>How progress is distributed over time. The shape of the curve gives motion its character.</dd></div>
+            <div class="glossary__item"><dt>Ease-in / ease-out</dt><dd>Accelerating from rest versus decelerating into rest. Enter with ease-out, leave with ease-in.</dd></div>
+            <div class="glossary__item"><dt>Exaggeration</dt><dd>Pushing a pose or movement beyond realism so it reads at a glance on a small screen.</dd></div>
+            <div class="glossary__item"><dt>FLIP</dt><dd>First, Last, Invert, Play: measure an element before and after a layout change, then animate the difference with transforms.</dd></div>
+            <div class="glossary__item"><dt>Follow-through</dt><dd>Loose parts that keep moving after the main body stops, then settle. It sells weight and inertia.</dd></div>
+            <div class="glossary__item"><dt>Frame budget</dt><dd>The time available per frame: 16.7ms at 60Hz and 8.3ms at 120Hz, shared by scripts, style, layout and paint.</dd></div>
+            <div class="glossary__item"><dt>Interruptibility</dt><dd>The ability to change an animation’s target mid-flight without a jump in position or speed.</dd></div>
+            <div class="glossary__item"><dt>Jank</dt><dd>Visible stutter caused by frames that miss their deadline.</dd></div>
+            <div class="glossary__item"><dt>Layout thrashing</dt><dd>Alternating DOM reads and writes in a loop, forcing the browser to recalculate layout again and again within one frame.</dd></div>
+            <div class="glossary__item"><dt>linear()</dt><dd>A CSS timing function made from a list of points, able to express bounces, elastic curves and springs.</dd></div>
+            <div class="glossary__item"><dt>Momentum</dt><dd>Motion that continues after a gesture ends and decays with friction, as in inertial scrolling.</dd></div>
+            <div class="glossary__item"><dt>Overshoot</dt><dd>Passing the target before settling back. It signals energy and elasticity; use it sparingly.</dd></div>
+            <div class="glossary__item"><dt>Parallax</dt><dd>Layers moving at different speeds so the eye reads depth. Keep it subtle: large parallax can trigger motion sickness.</dd></div>
+            <div class="glossary__item"><dt>Perspective</dt><dd>The distance between the viewer and the z = 0 plane in CSS 3D. Smaller values exaggerate depth.</dd></div>
+            <div class="glossary__item"><dt>prefers-reduced-motion</dt><dd>An operating-system setting that asks for less motion. Preserve feedback using immediate static state changes; a short fade is an optional alternative, not a requirement.</dd></div>
+            <div class="glossary__item"><dt>requestAnimationFrame</dt><dd>Schedules a callback right before the next repaint: the heartbeat of JavaScript animation.</dd></div>
+            <div class="glossary__item"><dt>Restitution</dt><dd>The ratio of separating to approaching relative velocity along the collision normal. For an ideal collision with unchanged effective mass, the normal kinetic-energy fraction is e², not e. Zero removes normal rebound; tangential motion may remain.</dd></div>
+            <div class="glossary__item"><dt>Rubber banding</dt><dd>Resistance that grows as content is pulled past its edge, followed by a spring back.</dd></div>
+            <div class="glossary__item"><dt>Scroll-linked</dt><dd>Animation progress tied directly to scroll position, so it can be scrubbed forwards and backwards.</dd></div>
+            <div class="glossary__item"><dt>Scroll-triggered</dt><dd>An animation that plays on its own clock once an element enters the viewport.</dd></div>
+            <div class="glossary__item"><dt>Settle time</dt><dd>How long a spring takes to stay within a small tolerance of its target.</dd></div>
+            <div class="glossary__item"><dt>Spring</dt><dd>Motion defined by stiffness, damping and mass instead of a duration. The duration falls out of the physics.</dd></div>
+            <div class="glossary__item"><dt>Squash and stretch</dt><dd>Deforming a shape while keeping its volume, to convey weight and flexibility.</dd></div>
+            <div class="glossary__item"><dt>Stagger</dt><dd>Offsetting the start times of a group of elements so they move as a sequence.</dd></div>
+            <div class="glossary__item"><dt>Stiffness (k)</dt><dd>How strongly a spring pulls toward its target. Higher stiffness is snappier.</dd></div>
+            <div class="glossary__item"><dt>Velocity preservation</dt><dd>Carrying the current speed into a new animation so retargeting feels continuous instead of jerky.</dd></div>
+            <div class="glossary__item"><dt>View Transitions API</dt><dd>A browser API that snapshots the old and new state of the page and animates between them.</dd></div>
+            <div class="glossary__item"><dt>WAAPI</dt><dd>The Web Animations API: element.animate() with keyframes and playback control from JavaScript.</dd></div>
+            <div class="glossary__item"><dt>will-change</dt><dd>A hint that a property may change, allowing the browser to prepare. It does not guarantee layer promotion or GPU acceleration. Use it sparingly and remove it when unnecessary; preparation and layers can cost memory.</dd></div>
+          </dl>
+          <p class="glossary__empty" data-glossary-empty hidden>No terms match. Try a shorter word.</p>
+        </section>
+
+        <nav class="chapter-nav" aria-label="More">
+          <a class="chapter-nav__link chapter-nav__link--prev" href="craft.html" style="--c:var(--mint)">
+            <span class="chapter-nav__dir"><svg class="icon chapter-nav__arrow" aria-hidden="true"><use href="../assets/icons.svg#i-arrow-left"/></svg>Previous</span>
+            <span class="chapter-nav__title"><span class="chapter-nav__num">09</span>Accessibility &amp; performance</span>
+          </a>
+          <a class="chapter-nav__link chapter-nav__link--next" href="index.html" style="--c:var(--accent)">
+            <span class="chapter-nav__dir">Back to</span>
+            <span class="chapter-nav__title">Field guide home</span>
+            <svg class="icon chapter-nav__arrow" aria-hidden="true"><use href="../assets/icons.svg#i-arrow-right"/></svg>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </main>
+
+  <footer class="guide-footer">
+    <div class="guide-footer__inner">
+      <span>© 2026 Kinetic · Field guide</span>
+      <span class="guide-footer__links"><a href="../index.html">Showcase</a><a href="index.html">Guide home</a><a href="cheatsheet.html">Cheat sheet</a></span>
+      <span>Press <kbd>M</kbd> to toggle motion</span>
+    </div>
+  </footer>
+</body>
+</html>

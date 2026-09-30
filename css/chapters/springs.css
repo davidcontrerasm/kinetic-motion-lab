@@ -1,0 +1,366 @@
+/* ==========================================================================
+   Chapter 03 — Springs & physics
+   ========================================================================== */
+
+/* 3.2 Interruption */
+.interrupt {
+  display: grid;
+  align-content: center;
+  gap: 20px;
+  border-radius: 16px;
+  cursor: crosshair;
+  outline-offset: 6px;
+  touch-action: manipulation;
+}
+
+.lane {
+  display: grid;
+  gap: 8px;
+}
+
+.lane__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--paper);
+  font: 500 12px/1 var(--font-mono);
+}
+
+.lane__head small {
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.lane__track {
+  position: relative;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: var(--ink-3);
+}
+
+.lane__ball {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.lane--tween .lane__ball {
+  background: var(--accent);
+  box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.45);
+}
+
+.lane--spring .lane__ball {
+  background: var(--mint);
+  box-shadow: 0 0 18px rgba(69, 227, 184, 0.45);
+}
+
+.lane__target {
+  position: absolute;
+  top: -7px;
+  bottom: -7px;
+  left: 20px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--paper);
+  opacity: 0.35;
+}
+
+.lane canvas {
+  display: block;
+  width: 100%;
+  height: 46px;
+}
+
+/* 3.3 Damping regimes */
+.regimes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.regime {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--ink-3);
+}
+
+.regime--under {
+  --c: var(--gold);
+}
+
+.regime--critical {
+  --c: var(--mint);
+}
+
+.regime--over {
+  --c: var(--iris);
+}
+
+.regime__name {
+  color: var(--c);
+  font: 500 12px/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.regime__meta {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font: 500 10.5px/1.3 var(--font-mono);
+}
+
+.regime__meta b {
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.regime__track {
+  position: relative;
+  height: 190px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--ink-2);
+}
+
+.regime__ball {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--c) 50%, transparent);
+  will-change: transform;
+}
+
+.regime__rest {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+  left: 10px;
+  border-top: 1px dashed rgba(243, 240, 234, 0.35);
+}
+
+.regime svg {
+  width: 100%;
+  height: 58px;
+  overflow: visible;
+}
+
+.regime__trace {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.regime__rest-line {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  vector-effect: non-scaling-stroke;
+}
+
+@media (max-width: 560px) {
+  .regimes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .regime__track {
+    height: 150px;
+  }
+}
+
+/* 3.4 Momentum and snapping */
+.fling {
+  position: relative;
+  height: 340px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(243, 240, 234, 0.08) 1px, transparent 0) 0 0 / 26px 26px,
+    var(--ink-3);
+  touch-action: none;
+}
+
+.fling__puck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #8ff5d8, var(--mint) 60%);
+  box-shadow: 0 10px 26px -8px rgba(69, 227, 184, 0.7);
+  cursor: grab;
+  touch-action: none;
+  transition: box-shadow 0.25s;
+}
+
+.fling__puck.is-dragging {
+  box-shadow: 0 16px 40px -8px rgba(69, 227, 184, 0.9);
+  cursor: grabbing;
+}
+
+.fling__ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
+  border: 2px dashed var(--paper);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.fling__ring.is-visible {
+  opacity: 0.65;
+}
+
+.fling__target {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 70px;
+  height: 70px;
+  margin: -35px 0 0 -35px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.fling__target::after {
+  content: '';
+  position: absolute;
+  inset: 31px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.fling.is-snapping .fling__target {
+  opacity: 1;
+}
+
+/* 3.5 Rubber banding */
+.rb-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  outline-offset: -4px;
+}
+
+.rb-viewport.is-dragging {
+  cursor: grabbing;
+}
+
+.rb-list {
+  display: grid;
+  gap: 8px;
+  padding: 40px 12px 16px;
+  will-change: transform;
+}
+
+.rb-list__title {
+  margin: 0 4px 4px;
+  color: var(--paper);
+  font: 600 18px/1 var(--font-display);
+}
+
+.rb-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #1f1f28;
+}
+
+.rb-row i {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: hsl(var(--h) 70% 62%);
+}
+
+.rb-row span {
+  display: grid;
+  gap: 6px;
+}
+
+.rb-row b { font-size: 13px; line-height: 1.35; font-weight: 500; }
+.rb-row small { color: var(--paper-dim); font-size: 11px; }
+.rb-row span { min-width: 0; }
+.rb-row { min-height: 66px; }
+
+.rb-side {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+}
+
+.rb-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 250px) minmax(0, 1fr);
+  align-items: center;
+  gap: 22px;
+}
+
+@media (max-width: 560px) {
+  .rb-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* 3.6 / 3.7 Canvases */
+.physics-canvas {
+  display: block;
+  width: 100%;
+  height: 340px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(243, 240, 234, 0.07) 1px, transparent 0) 0 0 / 26px 26px,
+    var(--ink-3);
+  cursor: crosshair;
+  touch-action: manipulation;
+  outline-offset: 4px;
+}
+
+.physics-canvas--chain { cursor: crosshair; }
+body[data-chapter='springs'] .guide__content,
+body[data-chapter='springs'] .stage__view,
+body[data-chapter='springs'] .regime { min-width: 0; }
+body[data-chapter='springs'] .stage .chip,
+body[data-chapter='springs'] .stage .btn,
+body[data-chapter='springs'] .stage .range { min-height: 44px; }
+body[data-chapter='springs'] .stage__bar .readout { flex-basis: 100%; margin: 4px 0; }
+body[data-chapter='springs'] button:disabled { opacity: .5; cursor: default; }
+@media (max-width: 560px) {
+  .lane__head { flex-wrap: wrap; line-height: 1.4; }
+  .rb-layout .phone { width: min(100%, 250px); }
+  .fling, .physics-canvas { height: 290px; }
+}

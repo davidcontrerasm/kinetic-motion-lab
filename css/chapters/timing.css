@@ -1,0 +1,475 @@
+/* ==========================================================================
+   Chapter 01 — Timing & duration
+   ========================================================================== */
+
+/* 1.1 / 1.5 Ladders of rails */
+.ladder {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+}
+
+/* 1.2 Distance-scaled durations */
+.dist-rows {
+  display: grid;
+  gap: 14px;
+}
+
+.dist-row {
+  --f: 1;
+  display: grid;
+  gap: 6px;
+}
+
+.rail__target {
+  position: absolute;
+  top: 50%;
+  left: calc(17px + var(--f) * (100% - 36px));
+  width: 2px;
+  height: 20px;
+  margin-top: -10px;
+  border-radius: 2px;
+  background: var(--line-strong);
+}
+
+.dist-row__meta {
+  color: var(--muted);
+  font: 500 11px/1 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.dist-row__meta b {
+  color: var(--paper);
+  font-weight: 500;
+}
+
+/* 1.3 Asymmetric sheets */
+.phone--sm {
+  width: min(100%, 200px);
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scrim--symmetric {
+  transition: opacity 400ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.scrim--asymmetric {
+  transition: opacity 200ms cubic-bezier(0.3, 0, 0.8, 0.15);
+}
+
+.scrim--asymmetric.is-open {
+  transition: opacity 340ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.scrim.is-open {
+  opacity: 1;
+}
+
+.sheet {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 6;
+  padding: 10px 14px 18px;
+  border-radius: 22px 22px 0 0;
+  background: #25252f;
+  box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.4);
+  transform: translateY(105%);
+}
+
+.sheet.is-open {
+  transform: none;
+}
+
+/* The same transition in both directions: the CSS default. */
+.sheet--symmetric {
+  transition: transform 400ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Closing uses the base rule; opening uses the rule on the open state. */
+.sheet--asymmetric {
+  transition: transform 200ms cubic-bezier(0.3, 0, 0.8, 0.15);
+}
+
+.sheet--asymmetric.is-open {
+  transition: transform 340ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.sheet__grip {
+  display: block;
+  width: 34px;
+  height: 4px;
+  margin: 0 auto 12px;
+  border-radius: 4px;
+  background: var(--ink-4);
+}
+
+.sheet__title {
+  color: var(--paper);
+  font: 600 13px/1 var(--font-display);
+}
+
+.sheet__row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.sheet__row span {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #34343f;
+  color: var(--paper-dim);
+}
+
+.sheet__row .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.sheet__line {
+  height: 8px;
+  margin-top: 14px;
+  border-radius: 4px;
+  background: #34343f;
+}
+
+.sheet__line + .sheet__line {
+  width: 64%;
+  margin-top: 8px;
+}
+
+/* 1.4 Latency */
+.latency {
+  display: grid;
+  align-content: center;
+  gap: 30px;
+}
+
+.latency__center {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+}
+
+.latency__btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 200px;
+  height: 56px;
+  padding: 0 28px;
+  border-radius: 16px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 600 15px/1 var(--font-display);
+  transition:
+    transform 0.15s var(--ease-out-back),
+    background-color 0.3s;
+}
+
+.latency__btn > * {
+  grid-area: 1 / 1;
+  transition: opacity 0.2s;
+}
+
+.latency__btn:active {
+  transform: scale(0.95);
+}
+
+.is-no-ack .latency__btn:active {
+  transform: none;
+}
+
+.latency__spinner {
+  width: 22px;
+  height: 22px;
+  border: 2.5px solid rgba(10, 10, 13, 0.2);
+  border-top-color: var(--ink);
+  border-radius: 50%;
+  opacity: 0;
+  animation: spin 0.8s linear infinite;
+}
+
+.latency__check {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+}
+
+.latency__btn.is-busy {
+  background: #cfccc5;
+}
+
+.latency__btn.is-busy .latency__label,
+.latency__btn.is-done .latency__label {
+  opacity: 0;
+}
+
+.latency__btn.is-busy .latency__spinner {
+  opacity: 1;
+}
+
+.latency__btn.is-done {
+  background: var(--lime);
+}
+
+.latency__btn.is-done .latency__check {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.4s var(--ease-out-expo);
+}
+
+.latency__status {
+  margin: 0;
+  color: var(--muted);
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.timeline {
+  position: relative;
+  padding-top: 34px;
+}
+
+.timeline__zones {
+  position: relative;
+  height: 18px;
+  overflow: hidden;
+  border-radius: 9px;
+  background: var(--ink-3);
+}
+
+.timeline__zones span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--from) / 1200 * 100%);
+  width: calc((var(--to) - var(--from)) / 1200 * 100%);
+}
+
+.timeline__zones span + span {
+  box-shadow: inset 1px 0 0 rgba(10, 10, 13, 0.35);
+}
+
+.timeline__zones span:nth-child(1),
+.timeline__legend li:nth-child(1) {
+  --zone: var(--lime);
+}
+
+.timeline__zones span:nth-child(2),
+.timeline__legend li:nth-child(2) {
+  --zone: var(--gold);
+}
+
+.timeline__zones span:nth-child(3),
+.timeline__legend li:nth-child(3) {
+  --zone: #ff8a5c;
+}
+
+.timeline__zones span:nth-child(4),
+.timeline__legend li:nth-child(4) {
+  --zone: var(--ink-4);
+}
+
+.timeline__zones span {
+  background: var(--zone);
+}
+
+.timeline__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--paper-dim);
+  font: 500 11px/1 var(--font-mono);
+}
+
+.timeline__legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.timeline__legend li::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  background: var(--zone);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.timeline__legend small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.timeline__response {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  width: 2px;
+  height: 40px;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: var(--paper);
+  transition: left 0.3s var(--ease-out-expo);
+}
+
+.timeline__response::before {
+  content: 'Response';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  padding-bottom: 4px;
+  color: var(--paper);
+  font: 500 10px/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.timeline__marker {
+  position: absolute;
+  top: 37px;
+  left: -6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 0 0 4px rgba(243, 240, 234, 0.18);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.timeline__marker.is-running {
+  opacity: 1;
+}
+
+.timeline__scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  color: var(--muted);
+  font: 500 10px/1 var(--font-mono);
+}
+
+.latency__spinner { animation-play-state: paused; }
+[data-demo='latency'][data-active='true'] .latency__btn.is-busy .latency__spinner { animation-play-state: running; }
+.timing-explanation { margin: 0; padding: 12px 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+[data-demo='framerate'].is-paused .icon--pause { display: none; }
+[data-demo='framerate'].is-paused .icon--play { display: block; }
+[data-demo='framerate'] .stage__hint::after { content: ' · simulated sampling, not measured visible FPS'; }
+@media (max-width: 420px) {
+  .rail-row { grid-template-columns: 72px minmax(0, 1fr); gap: 8px; }
+}
+
+/* 1.6 Hover intent */
+.intent {
+  display: grid;
+  align-content: center;
+  gap: 22px;
+}
+
+.intent__group {
+  display: grid;
+  justify-items: center;
+}
+
+.intent__group .pane-label {
+  margin-bottom: 44px;
+}
+
+.intent__bar {
+  position: relative;
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--ink-3);
+}
+
+.intent__btn {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  color: var(--paper-dim);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.intent__btn:hover,
+.intent__btn:focus-visible {
+  background: var(--ink-4);
+  color: var(--paper);
+}
+
+.tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 600 12px/1 var(--font-display);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(var(--x, 0px)) translateX(-50%) translateY(5px) scale(0.85);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.15s,
+    transform 0.28s var(--ease-out-back);
+}
+
+.tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-top-color: var(--paper);
+}
+
+.tip.is-visible {
+  opacity: 1;
+  transform: translateX(var(--x, 0px)) translateX(-50%);
+}
+
+.tip.is-gliding {
+  transition:
+    opacity 0.15s,
+    transform 0.24s var(--ease-out-expo);
+}
+
+/* Phone rules follow the base definitions so they actually win the cascade. */
+@media (max-width: 420px) {
+  .intent__bar { gap: 3px; padding: 4px; }
+  .intent__btn { width: 36px; height: 44px; }
+}

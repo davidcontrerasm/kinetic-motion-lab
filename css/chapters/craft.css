@@ -1,0 +1,39 @@
+/* Chapter 09: experiments are idle by default, including CSS lanes. */
+.c-stage { min-width: 0; }
+.c-stage button, .c-stage select, .c-stage input { min-height: 44px; }
+.c-stage button, .c-stage select, .c-stage input[type='text'] { padding: 10px 12px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--ink-3); color: var(--paper); font: inherit; min-width: 0; }
+.c-stage button[aria-pressed='true'] { border-color: var(--chapter); }.c-stage button:disabled { opacity: .5; cursor: default; }
+.c-stage [hidden] { display: none !important; }
+.c-control { display: grid; gap: 6px; flex: 1 1 170px; min-width: 0; font-size: 13px; }.c-control input,.c-control select { width: 100%; }
+.c-check { display: flex; align-items: center; gap: 10px; min-height: 44px; }.c-check input { min-height: 22px; width: 22px; height: 22px; }
+.c-readout { font: 12px/1.7 var(--font-mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+body[data-chapter='craft'] figcaption { margin: 12px 4px; color: var(--paper-dim); font-size: 13px; }
+.c-alternatives { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }.c-alternatives h3 { font-size: 15px; }
+.c-message { padding: 18px; background: linear-gradient(140deg,#263d38,#1a2226); border-radius: 16px; border: 1px solid var(--line-strong); min-height: 210px; }
+.c-message--quiet { outline: 2px solid var(--mint); outline-offset: -2px; }.c-message h4 { margin: 0 0 10px; font-size: 22px; }.c-message button { width: 100%; }
+.c-lanes { display: grid; gap: 20px; }.c-lanes b { font: 12px var(--font-mono); }
+.c-rail { position: relative; height: 40px; margin-top: 10px; background: var(--ink-4); border-radius: 12px; overflow: hidden; }
+.c-rail i { position: absolute; top: 6px; left: 0; width: 28px; height: 28px; border-radius: 8px; background: var(--mint); }
+.c-rail [data-lane='left'] { background: var(--gold); }.c-rail [data-lane='raf'] { background: var(--iris); }
+[data-demo='main-thread'][data-started='true'] [data-lane='transform'] { animation: c-transform-lane 1.2s linear infinite alternate paused; }
+[data-demo='main-thread'][data-started='true'] [data-lane='left'] { animation: c-left-lane 1.2s linear infinite alternate paused; }
+[data-demo='main-thread'][data-started='true'][data-running='true'] [data-lane] { animation-play-state: running; }
+@keyframes c-transform-lane { to { transform: translateX(var(--travel,0px)); } }
+@keyframes c-left-lane { to { left: var(--travel,0px); } }
+[data-motion='reduced'] [data-demo='main-thread'] [data-lane] { animation: none !important; transform: none !important; left: 0 !important; }
+.c-warning { padding: 12px; border: 1px solid #ffc53d66; border-radius: 12px; font-size: 13px; }
+.c-block-spinner { display: block; width: 26px; height: 26px; border: 3px solid var(--line-strong); border-top-color: var(--mint); border-radius: 50%; }
+[data-block-state='scheduled'] .c-block-spinner { animation: spin 1s linear infinite; }
+.c-cost-grid { display: grid; grid-template-columns: repeat(15,minmax(0,1fr)); gap: 7px; padding: 10px; overflow: hidden; min-width: 0; background: #0d1513; border-radius: 14px; }
+.c-cost-tile { height: 22px; min-width: 0; }
+.c-cost-shape { position: relative; display: block; width: 100%; height: 100%; background: #45a68b; border-radius: 3px; transform-origin: left; }
+.c-cost-overlay { position: absolute; inset: 0; border-radius: inherit; box-shadow: 0 3px 8px #000b; opacity: 0; }
+.c-thrash-sandbox { height: 240px; overflow: auto; contain: layout paint; padding: 12px; border: 1px solid var(--line-strong); border-radius: 12px; }
+.c-thrash-sandbox ol { list-style: none; margin: 0; padding: 0; }.c-thrash-row { width: 100px; height: 22px; margin-bottom: 3px; padding: 2px 6px; background: #25483c; font: 11px/18px var(--font-mono); }
+.c-code-pair { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }.c-code-pair pre { min-width: 0; }
+.c-focus-area { position: relative; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 22px; padding: 16px; }
+.c-focus-area > button { align-self: end; }.c-focus-area input,.c-focus-area select { max-width: 100%; }
+.c-focus-ring { position: absolute; pointer-events: none; border-radius: 12px; transform-origin: 0 0; box-shadow: 0 0 0 7px #45e3b840; z-index: 2; }
+.c-focus-area :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+@media(max-width:620px) { .c-alternatives,.c-code-pair,.c-focus-area { grid-template-columns: minmax(0,1fr); }.c-cost-grid { grid-template-columns: repeat(10,minmax(0,1fr)); gap: 5px; }.c-cost-tile { height: 17px; } }
+.no-js body[data-chapter='craft'] .quiz__why { grid-template-rows: 1fr; opacity: 1; }

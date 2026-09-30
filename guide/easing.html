@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en" class="no-js" data-motion="full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Easing &amp; curves — Kinetic field guide</title>
+  <meta name="description" content="Chapter 02 of the Kinetic field guide: why linear feels robotic, the easing families, choosing curves by direction, cubic-bezier anatomy, linear(), steps() and easing tokens.">
+  <meta name="theme-color" content="#0a0a0d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0d'/%3E%3Cpath d='M16 7v18M8.2 11.5l15.6 9M8.2 20.5l15.6-9' stroke='%23ff5a36' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&amp;family=Space+Grotesk:wght@300..700&amp;display=swap">
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.remove('no-js');
+      root.classList.add('js');
+      try {
+        var stored = localStorage.getItem('kinetic:motion');
+        var reduced = stored ? stored === 'reduced' : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root.setAttribute('data-motion', reduced ? 'reduced' : 'full');
+      } catch (e) {}
+    })();
+  </script>
+  <script nomodule>document.documentElement.classList.add('no-module');</script>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/demos.css">
+  <link rel="stylesheet" href="../css/guide.css">
+  <link rel="stylesheet" href="../css/chapters/easing.css">
+  <script type="module" src="../js/guide.js"></script>
+</head>
+<body data-page="chapter" data-chapter="easing" style="--chapter: var(--accent)">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="cursor" data-cursor-root aria-hidden="true"><div class="cursor__ring"><div class="cursor__shape"></div><span class="cursor__label"></span></div><div class="cursor__dot"></div></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+  <header class="site-header site-header--guide" data-header>
+    <a class="brand" href="../index.html" data-magnetic="0.25">
+      <span class="brand__mark" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-asterisk"/></svg></span>
+      <span class="brand__word">Kinetic</span>
+      <span class="brand__tag">Field guide</span>
+    </a>
+    <nav class="nav" aria-label="Guide">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="../index.html"><span data-roll>Showcase</span></a></li>
+        <li><a class="nav__link" href="index.html" data-guide-link="guide-index"><span data-roll>Guide</span></a></li>
+        <li><button class="nav__link nav__link--menu" type="button" data-chapter-toggle aria-expanded="false" aria-controls="chapter-menu"><span>Chapters</span><svg class="icon nav__chevron" aria-hidden="true"><use href="../assets/icons.svg#i-chevron"/></svg></button></li>
+        <li><a class="nav__link" href="cheatsheet.html" data-guide-link="cheatsheet"><span data-roll>Cheat sheet</span></a></li>
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="true" title="Toggle motion (M)">
+        <span class="motion-toggle__track" aria-hidden="true"><span class="motion-toggle__thumb"></span></span>
+        <span class="motion-toggle__label">Motion <b data-motion-label>On</b></span>
+      </button>
+      <button class="burger" type="button" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu"><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="chapter-menu" id="chapter-menu" data-chapter-menu hidden><div class="chapter-menu__grid" data-chapter-grid></div></div>
+  <div class="mobile-menu mobile-menu--guide" id="mobile-menu" data-menu hidden>
+    <nav aria-label="Mobile"><ol class="mobile-menu__list" data-mobile-list></ol></nav>
+    <p class="mobile-menu__foot">Kinetic field guide</p>
+  </div>
+
+  <main id="main" class="guide">
+    <header class="chapter-hero">
+      <div>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Field guide</a><span aria-hidden="true">/</span><span>Chapter 02</span></nav>
+        <h1 class="chapter-hero__title" data-split>Easing &amp; curves</h1>
+        <p class="chapter-hero__lede">Duration says how long; easing says how. The curve decides where the time is spent, whether motion launches or lands, glides or snaps. Learn to read curves at a glance, pick them by intent, and author the ones cubic-bezier cannot express.</p>
+        <div class="chapter-hero__meta">
+          <span class="meta-chip"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-book"/></svg><b>7</b> lessons</span>
+          <span class="meta-chip"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-clock"/></svg><b>20</b> min</span>
+          <span class="meta-chip"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-check"/></svg><b data-chapter-percent>0%</b> studied</span>
+        </div>
+      </div>
+      <aside class="objectives" aria-label="Learning objectives">
+        <span class="objectives__title">You will learn to</span>
+        <ul>
+          <li>Explain why linear motion looks mechanical, using velocity</li>
+          <li>Read any easing curve and predict how it will feel</li>
+          <li>Choose curves by direction: entering, leaving or moving</li>
+          <li>Shape cubic-bezier handles and know their limits</li>
+          <li>Author bounces and springs with linear(), and discrete motion with steps()</li>
+        </ul>
+      </aside>
+      <span class="chapter-hero__num" aria-hidden="true">02</span>
+    </header>
+
+    <div class="guide__layout">
+      <aside class="toc" aria-label="Lessons in this chapter">
+        <div class="toc__inner">
+          <span class="toc__title">In this chapter</span>
+          <div class="toc__track"><ol class="toc__list" data-toc-list></ol></div>
+          <div class="toc__progress"><b data-chapter-percent>0%</b> studied<div class="toc__bar"><span data-chapter-bar></span></div></div>
+        </div>
+      </aside>
+
+      <div class="guide__content">
+        <!-- 2.1 -->
+        <section class="lesson" id="linear" data-lesson data-toc="2.1">
+          <div class="lesson__head"><span class="lesson__num">2.1</span><h2 class="lesson__title">Why linear looks robotic</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">Nothing in the physical world starts or stops instantly. Linear motion does both, and the eye notices within a single frame.</p>
+              <p>A linear animation jumps from standing still to full speed on its first frame and stops dead on its last. That infinite acceleration is what reads as mechanical. Easing redistributes progress over time so that <strong>velocity ramps</strong> instead of switching on and off.</p>
+              <p>Look at the velocity plots under each track. Linear is a flat box with vertical walls. Ease-out starts fast and glides down to zero, which is exactly what an object with mass does as it comes to rest.</p>
+              <p>Linear still has honest jobs: progress bars that mirror real work, continuous rotation such as spinners, marquees, and colour or opacity changes where there is no sense of mass to betray.</p>
+              <p class="try"><b>Try it</b><span>Watch only the right-hand end of each track. The linear card slams into place; the eased card settles. Then pause and compare the shapes of the two velocity plots.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="linear-vs-eased">
+                <div class="stage__view ease-compare">
+                  <div class="ease-row" data-ease-row="linear">
+                    <div class="ease-row__head"><span class="ease-row__name">linear<small>constant speed</small></span><span class="vel-label">velocity</span></div>
+                    <div class="ease-track"><div class="ease-card ease-card--linear"><span></span><span></span></div></div>
+                    <svg class="vel" viewBox="0 0 300 56" preserveAspectRatio="none" aria-hidden="true"><line class="vel__axis" x1="0" y1="56" x2="300" y2="56"/><path class="vel__path vel__path--linear" d=""/><line class="vel__cursor" x1="0" y1="0" x2="0" y2="56"/></svg>
+                  </div>
+                  <div class="ease-row" data-ease-row="out">
+                    <div class="ease-row__head"><span class="ease-row__name">ease-out cubic<small>fast, then gliding</small></span><span class="vel-label">velocity</span></div>
+                    <div class="ease-track"><div class="ease-card"><span></span><span></span></div></div>
+                    <svg class="vel" viewBox="0 0 300 56" preserveAspectRatio="none" aria-hidden="true"><line class="vel__axis" x1="0" y1="56" x2="300" y2="56"/><path class="vel__path" d=""/><line class="vel__cursor" x1="0" y1="0" x2="0" y2="56"/></svg>
+                  </div>
+                </div>
+                <div class="stage__bar">
+                  <button class="btn btn--small btn--icon" type="button" data-toggle aria-label="Pause"><svg class="icon icon--pause" aria-hidden="true"><use href="../assets/icons.svg#i-pause"/></svg><svg class="icon icon--play" aria-hidden="true"><use href="../assets/icons.svg#i-play"/></svg></button>
+                  <span class="stage__hint">The line on each plot is the current moment</span>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Velocity should <strong>rise and fall smoothly</strong>. Ease-out for arrivals, ease-in for departures, ease-in-out for movement between two points on screen.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Hand-rolled JavaScript animation is linear by default: <code>x += speed * dt</code> has constant velocity. Compute linear progress, then pass it through an easing function.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">JS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="js">const easeOutCubic = (t) =&gt; 1 - Math.pow(1 - t, 3);
+
+function slide(el, distance, duration) {
+  const start = performance.now();
+  requestAnimationFrame(function frame(now) {
+    const t = Math.min((now - start) / duration, 1); // linear time, 0 to 1
+    const progress = easeOutCubic(t);                  // eased progress
+    el.style.transform = `translateX(${progress * distance}px)`;
+    if (t &lt; 1) requestAnimationFrame(frame);
+  });
+}</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 2.2 -->
+        <section class="lesson" id="families" data-lesson data-toc="2.2">
+          <div class="lesson__head"><span class="lesson__num">2.2</span><h2 class="lesson__title">The easing families</h2></div>
+          <div class="lesson__grid lesson__grid--stack">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">Easing functions come in families. Learn their shapes once and you can read any curve at a glance.</p>
+              <p>Quad, cubic and quart are polynomials (t&sup2;, t&sup3;, t&#8308;): each step up makes the acceleration more dramatic and the tail longer. Expo is exponential rather than a power of t, the most extreme of the everyday curves, and circ follows a quarter circle. Each family comes in three flavours: <strong>in</strong> (slow start), <strong>out</strong> (slow end) and <strong>in-out</strong> (both).</p>
+              <p>Expressive curves add character. <strong>Back</strong> and <strong>elastic</strong> leave the box to overshoot the target, which reads as energy or elasticity. <strong>Bounce</strong> never goes past the target; it stays inside the box and strikes the top edge several times, like a ball dropped onto its resting place.</p>
+              <p>To read a curve, remember that the horizontal axis is time and the vertical axis is progress. <strong>Steep means fast, flat means slow</strong>, and any part of the curve above the dashed box has gone past the target.</p>
+              <p class="try"><b>Try it</b><span>Hover or tap the cards. Compare Out quad with Out expo: same destination, completely different confidence. Filter to In-out and notice how all of them are symmetric.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="easing-gallery">
+                <div class="stage__view"><div class="egallery" data-gallery-grid></div></div>
+                <div class="stage__bar">
+                  <button class="btn btn--small btn--primary" type="button" data-play><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-play"/></svg><span>Play all</span></button>
+                  <div class="chips chips--sm" role="group" aria-label="Filter curves">
+                    <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+                    <button class="chip" type="button" data-filter="out" aria-pressed="false">Out</button>
+                    <button class="chip" type="button" data-filter="in" aria-pressed="false">In</button>
+                    <button class="chip" type="button" data-filter="inout" aria-pressed="false">In-out</button>
+                    <button class="chip" type="button" data-filter="expressive" aria-pressed="false">Expressive</button>
+                  </div>
+                  <span class="stage__hint">Hover a card to play it</span>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p><strong>Steep is fast, flat is slow, outside the box overshoots.</strong> Out curves are the workhorses for interface arrivals; keep back, elastic and bounce for moments of delight.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Elastic and bounce on functional UI. They are charming the first time and slow people down every time after that.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">JS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="js">// Polynomial families use powers of t. "Out" is "in" flipped: out(t) = 1 - in(1 - t).
+const easeInCubic = (t) =&gt; t * t * t;
+const easeOutCubic = (t) =&gt; 1 - Math.pow(1 - t, 3);
+const easeInOutCubic = (t) =&gt;
+  t &lt; 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+// Expo is exponential, not a power of t.
+const easeOutExpo = (t) =&gt; (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+
+// Back overshoots: it briefly returns values above 1.
+const easeOutBack = (t) =&gt; {
+  const c1 = 1.70158;
+  return 1 + (c1 + 1) * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+};</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 2.3 -->
+        <section class="lesson" id="direction" data-lesson data-toc="2.3">
+          <div class="lesson__head"><span class="lesson__num">2.3</span><h2 class="lesson__title">Choose the curve by direction</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">The direction of travel picks the curve: arrive with ease-out, leave with ease-in, and move across the screen with ease-in-out.</p>
+              <p>An entrance with ease-in accelerates into its resting place and stops at full speed, so it crashes. An exit with ease-out spends its slowest moments right at the edge of the screen, so it lingers. Linear movement between two visible points starts and stops with a jolt.</p>
+              <p>Match the curve to the story. <strong>Deceleration means arriving</strong>, <strong>acceleration means leaving</strong>, and a <strong>symmetric curve means travelling</strong> between two places the user can see.</p>
+              <p class="try"><b>Try it</b><span>Play all six at once, then watch one column at a time. The bottom row is not broken; it simply feels off. That small wrongness is exactly what users sense and cannot name.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="direction">
+                <div class="stage__view">
+                  <div class="dgrid">
+                    <span class="dgrid__col-title">Enter</span>
+                    <span class="dgrid__col-title">Exit</span>
+                    <span class="dgrid__col-title">Move</span>
+                    <div class="dcell dcell--good" data-cell data-action="enter" data-curve="cubic-bezier(0.05, 0.7, 0.1, 1)">
+                      <div class="dcell__stage"><span class="dcard"></span></div>
+                      <span class="dcell__label">Enter · ease-out <span class="verdict verdict--good">Right</span></span>
+                    </div>
+                    <div class="dcell dcell--good" data-cell data-action="exit" data-curve="cubic-bezier(0.3, 0, 0.8, 0.15)">
+                      <div class="dcell__stage"><span class="dcard"></span></div>
+                      <span class="dcell__label">Exit · ease-in <span class="verdict verdict--good">Right</span></span>
+                    </div>
+                    <div class="dcell dcell--good" data-cell data-action="move" data-curve="cubic-bezier(0.65, 0, 0.35, 1)">
+                      <div class="dcell__stage"><span class="dcard"></span></div>
+                      <span class="dcell__label">Move · ease-in-out <span class="verdict verdict--good">Right</span></span>
+                    </div>
+                    <div class="dcell dcell--bad" data-cell data-action="enter" data-curve="cubic-bezier(0.7, 0, 0.84, 0)">
+                      <div class="dcell__stage"><span class="dcard"></span></div>
+                      <span class="dcell__label">Enter · ease-in <span class="verdict verdict--bad">Wrong</span></span>
+                    </div>
+                    <div class="dcell dcell--bad" data-cell data-action="exit" data-curve="cubic-bezier(0.16, 1, 0.3, 1)">
+                      <div class="dcell__stage"><span class="dcard"></span></div>
+                      <span class="dcell__label">Exit · ease-out <span class="verdict verdict--bad">Wrong</span></span>
+                    </div>
+                    <div class="dcell dcell--bad" data-cell data-action="move" data-curve="linear">
+                      <div class="dcell__stage"><span class="dcard"></span></div>
+                      <span class="dcell__label">Move · linear <span class="verdict verdict--bad">Wrong</span></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage__bar">
+                  <button class="btn btn--small btn--primary" type="button" data-play><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-play"/></svg><span>Play all</span></button>
+                  <span class="stage__hint">700ms, exaggerated so the difference is visible</span>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p><strong>Enter: ease-out. Exit: ease-in. On-screen move: ease-in-out.</strong> Combine with chapter 01: exits are also shorter.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Using ease-in-out for everything because it is the default in many design tools. It is right for only one of the three cases.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">CSS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="css">:root {
+  --ease-enter: cubic-bezier(0.05, 0.7, 0.1, 1);  /* decelerate */
+  --ease-exit: cubic-bezier(0.3, 0, 0.8, 0.15);   /* accelerate */
+  --ease-move: cubic-bezier(0.65, 0, 0.35, 1);    /* symmetric */
+}
+
+.toast[data-state='entering'] { animation: toast-in 320ms var(--ease-enter) both; }
+.toast[data-state='leaving'] { animation: toast-out 200ms var(--ease-exit) both; }
+.card.is-moving { transition: transform 400ms var(--ease-move); }</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 2.4 -->
+        <section class="lesson" id="bezier" data-lesson data-toc="2.4">
+          <div class="lesson__head"><span class="lesson__num">2.4</span><h2 class="lesson__title">Anatomy of cubic-bezier</h2></div>
+          <div class="lesson__grid lesson__grid--stack">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">Every <code>cubic-bezier()</code> curve, including the keywords <code>ease</code>, <code>ease-in</code> and <code>ease-out</code>, is a cubic B&eacute;zier with its ends pinned at (0, 0) and (1, 1). You shape it with two handles. (<code>steps()</code> and <code>linear()</code> work differently; they come next.)</p>
+              <p>The first handle (orange) shapes the start of the motion and the second (violet) shapes the end. The steeper the curve leaves a corner, the faster the motion is at that moment. Each handle has an x, which is time, and a y, which is progress. <strong>x must stay between 0 and 1</strong> because time cannot run backwards, but <strong>y is free</strong>: pull a handle above the frame and the motion overshoots; pull it below and the motion winds up first.</p>
+              <p>Under the hood the browser has to invert the curve. Given a moment in time x, it finds the parameter t where X(t) = x, then reads Y(t). Newton&ndash;Raphson converges in a few steps and a bisection fallback handles flat spots. Every preview in this lesson runs on that solver.</p>
+              <p class="try"><b>Try it</b><span>Choose Snap, then drag the orange handle above the top of the frame and watch the start overshoot. Focus a handle and use the arrow keys for precise nudges, with Shift for bigger steps.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="bezier" data-bezier>
+                <div class="panel bezier__graph">
+                  <div class="panel__head">
+                    <span class="panel__title">Curve editor</span>
+                    <span class="panel__hint">Drag or use arrow keys</span>
+                  </div>
+                  <svg class="bezier__svg" viewBox="-40 -140 380 580" data-bezier-svg role="group" aria-label="Cubic bezier curve editor">
+                    <rect class="bezier__frame" x="0" y="0" width="300" height="300" rx="4"/>
+                    <g class="bezier__grid">
+                      <line x1="75" y1="0" x2="75" y2="300"/><line x1="150" y1="0" x2="150" y2="300"/><line x1="225" y1="0" x2="225" y2="300"/>
+                      <line x1="0" y1="75" x2="300" y2="75"/><line x1="0" y1="150" x2="300" y2="150"/><line x1="0" y1="225" x2="300" y2="225"/>
+                    </g>
+                    <line class="bezier__linear" x1="0" y1="300" x2="300" y2="0"/>
+                    <text class="bezier__axis" x="0" y="326">Time</text>
+                    <text class="bezier__axis" x="300" y="326" text-anchor="end">1.0</text>
+                    <text class="bezier__axis" x="-12" y="4" text-anchor="end">1</text>
+                    <text class="bezier__axis" x="-12" y="304" text-anchor="end">0</text>
+                    <line class="bezier__playhead" data-playhead x1="0" y1="-130" x2="0" y2="430"/>
+                    <line class="bezier__arm bezier__arm--1" data-arm="1" x1="0" y1="300" x2="0" y2="300"/>
+                    <line class="bezier__arm bezier__arm--2" data-arm="2" x1="300" y1="0" x2="300" y2="0"/>
+                    <path class="bezier__curve" data-curve d="M0 300 C0 300 300 0 300 0"/>
+                    <circle class="bezier__anchor" cx="0" cy="300" r="5"/>
+                    <circle class="bezier__anchor" cx="300" cy="0" r="5"/>
+                    <circle class="bezier__progress" data-progress-dot r="7" cx="0" cy="300"/>
+                    <g class="bezier__handle bezier__handle--1" data-handle="0" tabindex="0" role="slider" aria-label="Control point 1" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">
+                      <circle class="bezier__hit" r="24"/><circle class="bezier__knob" r="10"/>
+                    </g>
+                    <g class="bezier__handle bezier__handle--2" data-handle="1" tabindex="0" role="slider" aria-label="Control point 2" aria-valuemin="0" aria-valuemax="1" aria-valuenow="1">
+                      <circle class="bezier__hit" r="24"/><circle class="bezier__knob" r="10"/>
+                    </g>
+                  </svg>
+                </div>
+
+                <div class="panel bezier__side">
+                  <div class="panel__head">
+                    <span class="panel__title">Presets</span>
+                    <span class="panel__hint">Curves morph between each other</span>
+                  </div>
+                  <div class="chips" role="group" aria-label="Easing presets" data-bezier-presets>
+                    <button class="chip" type="button" data-preset="linear" aria-pressed="false">Linear</button>
+                    <button class="chip" type="button" data-preset="ease" aria-pressed="false">Ease</button>
+                    <button class="chip" type="button" data-preset="easeInOut" aria-pressed="false">In-out</button>
+                    <button class="chip" type="button" data-preset="outExpo" aria-pressed="false">Out expo</button>
+                    <button class="chip" type="button" data-preset="outBack" aria-pressed="true">Out back</button>
+                    <button class="chip" type="button" data-preset="inOutBack" aria-pressed="false">In-out back</button>
+                    <button class="chip" type="button" data-preset="anticipate" aria-pressed="false">Anticipate</button>
+                    <button class="chip" type="button" data-preset="snap" aria-pressed="false">Snap</button>
+                  </div>
+
+                  <div class="tracks">
+                    <div class="track">
+                      <span class="track__label">Your curve</span>
+                      <div class="track__rail" data-rail><span class="track__ball" data-ball="curve"></span></div>
+                    </div>
+                    <div class="track track--ghost">
+                      <span class="track__label">Linear</span>
+                      <div class="track__rail"><span class="track__ball" data-ball="linear"></span></div>
+                    </div>
+                  </div>
+
+                  <div class="props">
+                    <div class="prop"><div class="prop__stage"><span class="prop__box" data-prop="scale"></span></div><span class="prop__label">Scale</span></div>
+                    <div class="prop"><div class="prop__stage"><span class="prop__box" data-prop="rotate"></span></div><span class="prop__label">Rotate</span></div>
+                    <div class="prop"><div class="prop__stage"><span class="prop__box" data-prop="opacity"></span></div><span class="prop__label">Opacity</span></div>
+                    <div class="prop"><div class="prop__stage"><span class="prop__bar" data-prop="width"></span></div><span class="prop__label">Width</span></div>
+                  </div>
+
+                  <div class="bezier__controls">
+                    <button class="btn btn--icon" type="button" data-bezier-toggle aria-label="Pause preview">
+                      <svg class="icon icon--pause" aria-hidden="true"><use href="../assets/icons.svg#i-pause"/></svg>
+                      <svg class="icon icon--play" aria-hidden="true"><use href="../assets/icons.svg#i-play"/></svg>
+                    </button>
+                    <label class="control control--inline">
+                      <span class="control__label">Duration <output data-bezier-duration-out>1000ms</output></span>
+                      <input class="range" type="range" min="200" max="2400" step="50" value="1000" data-bezier-duration>
+                    </label>
+                  </div>
+
+                  <div class="code-chip">
+                    <code data-bezier-code>cubic-bezier(0.34, 1.56, 0.64, 1)</code>
+                    <button class="code-chip__btn" type="button" data-copy-code>
+                      <svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-copy"/></svg><span data-copy-code-label>Copy</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p><strong>x values stay within 0&ndash;1; y values are free.</strong> A handle above 1 overshoots, a handle below 0 anticipates, and the angle a curve leaves each corner sets the speed there.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Trusting keyword names. CSS <code>ease-out</code> is <code>cubic-bezier(0, 0, 0.58, 1)</code>, far gentler than the expo-style curves modern interfaces use, and the default <code>ease</code> is not symmetric at all.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">JS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="js">// cubic-bezier(x1, y1, x2, y2) with endpoints fixed at (0,0) and (1,1)
+function cubicBezier(x1, y1, x2, y2) {
+  const coef = (p1, p2) =&gt; {
+    const c = 3 * p1, b = 3 * (p2 - p1) - c;
+    return { a: 1 - c - b, b, c };
+  };
+  const X = coef(x1, x2), Y = coef(y1, y2);
+  const sample = (k, t) =&gt; ((k.a * t + k.b) * t + k.c) * t;
+  const slope = (t) =&gt; (3 * X.a * t + 2 * X.b) * t + X.c;
+
+  function solveT(x) {
+    let t = x;                                // Newton-Raphson on X(t) = x
+    for (let i = 0; i &lt; 8; i++) {
+      const error = sample(X, t) - x;
+      if (Math.abs(error) &lt; 1e-7) return t;
+      const d = slope(t);
+      if (Math.abs(d) &lt; 1e-6) break;          // flat spot: Newton would jump away
+      t -= error / d;
+      if (t &lt; 0 || t &gt; 1) break;              // left the curve: stop trusting Newton
+    }
+    let lo = 0, hi = 1;                       // bisection always converges because
+    t = x;                                    // X(t) is monotonic when x1, x2 are in [0, 1]
+    for (let i = 0; i &lt; 40; i++) {
+      const value = sample(X, t);
+      if (Math.abs(value - x) &lt; 1e-7) break;
+      if (value &lt; x) lo = t; else hi = t;
+      t = (lo + hi) / 2;
+    }
+    return t;
+  }
+
+  return (x) =&gt; (x &lt;= 0 ? 0 : x &gt;= 1 ? 1 : sample(Y, solveT(x)));
+}</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 2.5 -->
+        <section class="lesson" id="linear-fn" data-lesson data-toc="2.5">
+          <div class="lesson__head"><span class="lesson__num">2.5</span><h2 class="lesson__title">Beyond cubic-bezier: linear()</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">A cubic B&eacute;zier can bend only so far: it can overshoot once, but it can never oscillate. <code>linear()</code> draws any curve from points, so bounces, elastics and real springs can run in pure CSS.</p>
+              <p><code>linear()</code> takes a list of progress values spread evenly over time (you can also pin a value to a percentage) and joins them with straight lines. With enough points the joins disappear. Because it is plain data, you can generate it from any function, including a physically simulated spring, and ship it as a CSS custom property.</p>
+              <p>Detect support with <code>CSS.supports()</code> or <code>@supports</code>, not a browser version string. Keep a cubic-bezier fallback in production; this builder demonstrates a JavaScript fallback using the same function.</p>
+              <p class="try"><b>Try it</b><span>Choose Bounce and drag the sample points down to about 8. The curve becomes a visible polyline and the box stutters at the corners. Around 30&ndash;40 points is a useful starting point; compare against the dashed exact curve, especially at sharp rebounds.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="linear-builder">
+                <div class="stage__view lb">
+                  <div class="chips chips--sm" role="group" aria-label="Curve presets">
+                    <button class="chip" type="button" data-lb-preset="spring" aria-pressed="true">Spring</button>
+                    <button class="chip" type="button" data-lb-preset="jelly" aria-pressed="false">Jelly</button>
+                    <button class="chip" type="button" data-lb-preset="bounce" aria-pressed="false">Bounce</button>
+                    <button class="chip" type="button" data-lb-preset="elastic" aria-pressed="false">Elastic</button>
+                  </div>
+                  <svg class="lb__plot" viewBox="0 0 300 160" data-lb-plot aria-hidden="true"></svg>
+                  <pre class="lb__code" data-lb-code></pre>
+                  <div class="lb__rail" data-lb-rail><span class="lb__box" data-lb-box></span></div>
+                  <p class="lb__fallback" data-lb-fallback hidden>This browser does not support linear(), so the box is animated from the same function in JavaScript.</p>
+                </div>
+                <div class="stage__bar">
+                  <button class="btn btn--small btn--primary" type="button" data-play><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-play"/></svg><span>Play</span></button>
+                  <label class="control control--grow">
+                    <span class="control__label">Sample points <output data-lb-samples-out>40</output></span>
+                    <input class="range" type="range" min="4" max="60" step="1" value="40" data-lb-samples>
+                  </label>
+                  <span class="readout" data-lb-meta></span>
+                  <button class="chip" type="button" data-lb-copy>Copy</button>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Generate <code>linear()</code> from real functions at build time or on start-up; <strong>30&ndash;50 points</strong> is a starting point, not a guarantee. High-frequency oscillations, sharp corners and large travel may require more samples.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Putting an unsupported value in a custom property and expecting the previous declaration to win. The property becomes invalid at computed-value time and resets to the initial value, <code>ease</code>. Guard with <code>@supports</code> instead.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">JS + CSS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="js">function linearFromFunction(fn, samples = 40) {
+  const points = [];
+  for (let i = 0; i &lt;= samples; i++) points.push(Number(fn(i / samples).toFixed(4)));
+  return `linear(${points.join(', ')})`;
+}
+
+document.documentElement.style.setProperty('--ease-bounce', linearFromFunction(easeOutBounce));
+
+/* CSS:
+.ball { transition: transform 800ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+@supports (transition-timing-function: linear(0, 1)) {
+  .ball { transition-timing-function: var(--ease-bounce); }
+}
+*/</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 2.6 -->
+        <section class="lesson" id="steps" data-lesson data-toc="2.6">
+          <div class="lesson__head"><span class="lesson__num">2.6</span><h2 class="lesson__title">Stepped timing</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">Not all motion should be smooth. <code>steps()</code> jumps between discrete states, which is exactly right for clocks, typewriters, sprites and counters.</p>
+              <p><code>steps(n, position)</code> divides the duration into n equal intervals and holds each value flat. The position keyword decides where each jump lands: <strong>jump-end</strong> (the default) waits a full interval before the first jump, <strong>jump-start</strong> jumps immediately, and <code>jump-both</code> / <code>jump-none</code> add or remove a step at the ends.</p>
+              <p>A typewriter is <code>steps(characters)</code> on a width measured in <code>ch</code> with a monospace font; a blinking caret is <code>steps(1)</code>; a sprite sheet is <code>steps(frames)</code> on <code>background-position</code>.</p>
+              <p class="try"><b>Try it</b><span>Press Replay and watch the white cursor cross the bars. jump-start is already a quarter full the instant it begins; jump-end waits a whole interval before its first jump.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="steps">
+                <div class="stage__view">
+                  <div class="steps-demo">
+                    <div class="sd">
+                      <span class="pane-label">Clock</span>
+                      <div class="clock" aria-hidden="true"><span class="clock__hand clock__hand--smooth"></span><span class="clock__hand clock__hand--steps"></span></div>
+                      <div class="sd__legend"><span>steps(12)</span><span>linear</span></div>
+                    </div>
+                    <div class="sd">
+                      <span class="pane-label">Where the jumps land</span>
+                      <div class="stepbars">
+                        <div class="stepbar"><code>jump-start</code><div class="stepbar__track"><span class="stepbar__fill stepbar__fill--start"></span><span class="stepbar__cursor"></span></div></div>
+                        <div class="stepbar"><code>jump-end</code><div class="stepbar__track"><span class="stepbar__fill stepbar__fill--end"></span><span class="stepbar__cursor"></span></div></div>
+                        <div class="stepbar"><code>linear</code><div class="stepbar__track stepbar__track--smooth"><span class="stepbar__fill stepbar__fill--smooth"></span><span class="stepbar__cursor"></span></div></div>
+                      </div>
+                    </div>
+                    <div class="sd sd--wide">
+                      <span class="pane-label">Typewriter · steps(28) on width in ch</span>
+                      <div class="tw"><span class="tw__text">Motion is a design decision.</span><span class="tw__caret" aria-hidden="true"></span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage__bar">
+                  <button class="btn btn--small btn--primary" type="button" data-play><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-refresh"/></svg><span>Replay</span></button>
+                  <button class="chip" type="button" data-clock-toggle aria-pressed="false">Pause clock</button>
+                  <span class="stage__hint">Clock and caret pause offscreen; Replay restarts the finite samples</span>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Use <code>steps()</code> for <strong>genuinely discrete</strong> states. For text, pair it with a monospace font and <code>ch</code> units so each step reveals exactly one character.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Stepped timing on the spatial movement of interface elements. It does not look retro; it looks like dropped frames.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">CSS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="css">.typewriter {
+  width: 28ch;                 /* the sentence is 28 characters long */
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: ui-monospace, monospace;
+  animation: type 2.8s steps(28, end) both;
+}
+@keyframes type { from { width: 0; } }
+
+.caret { animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.second-hand { animation: turn 60s steps(60) infinite; }
+@keyframes turn { to { transform: rotate(360deg); } }</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 2.7 -->
+        <section class="lesson" id="tokens" data-lesson data-toc="2.7">
+          <div class="lesson__head"><span class="lesson__num">2.7</span><h2 class="lesson__title">Easing as design tokens</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">Name your curves and durations once, then reuse them everywhere. Consistency is what makes motion feel designed rather than decorated.</p>
+              <p>A small vocabulary covers most products: a <strong>standard</strong> curve for movement on screen, an <strong>enter</strong> (decelerate) and an <strong>exit</strong> (accelerate) curve, one <strong>emphasized</strong> curve for hero moments and perhaps one <strong>overshoot</strong> for playful confirmations. Pair them with three or four duration tokens.</p>
+              <p>Engineers stop guessing, designers stop redlining milliseconds, and every surface of the product moves with the same accent. Changing the feel of the whole product becomes a one-line edit.</p>
+              <p class="try"><b>Try it</b><span>Open the menu with Standard at Medium, then switch to Emphasized at Long, then Overshoot at Short. Same component, three different voices. Notice that closing always uses the exit token.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="token-playground">
+                <div class="stage__view">
+                  <div class="tokens">
+                    <div class="token-col">
+                      <span class="stage-label">Easing token</span>
+                      <div class="token-list" role="group" aria-label="Easing tokens">
+                        <button class="token-opt" type="button" data-token="standard" aria-pressed="true"><svg viewBox="0 0 44 30" aria-hidden="true"></svg><span><b>Standard</b><small>--ease-standard</small></span></button>
+                        <button class="token-opt" type="button" data-token="enter" aria-pressed="false"><svg viewBox="0 0 44 30" aria-hidden="true"></svg><span><b>Enter</b><small>--ease-enter</small></span></button>
+                        <button class="token-opt" type="button" data-token="exit" aria-pressed="false"><svg viewBox="0 0 44 30" aria-hidden="true"></svg><span><b>Exit</b><small>--ease-exit</small></span></button>
+                        <button class="token-opt" type="button" data-token="emphasized" aria-pressed="false"><svg viewBox="0 0 44 30" aria-hidden="true"></svg><span><b>Emphasized</b><small>--ease-emphasized</small></span></button>
+                        <button class="token-opt" type="button" data-token="overshoot" aria-pressed="false"><svg viewBox="0 0 44 30" aria-hidden="true"></svg><span><b>Overshoot</b><small>--ease-overshoot</small></span></button>
+                      </div>
+                      <span class="stage-label">Duration token</span>
+                      <div class="chips chips--sm" role="group" aria-label="Duration tokens">
+                        <button class="chip" type="button" data-dur="short" aria-pressed="false">Short · 200</button>
+                        <button class="chip" type="button" data-dur="medium" aria-pressed="true">Medium · 320</button>
+                        <button class="chip" type="button" data-dur="long" aria-pressed="false">Long · 500</button>
+                      </div>
+                    </div>
+                    <div class="token-demo">
+                      <button class="btn btn--small" type="button" data-token-toggle aria-expanded="false" aria-controls="token-menu"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-sliders"/></svg><span>Options</span></button>
+                      <div class="token-demo__stage">
+                        <ul class="tmenu" id="token-menu" data-token-menu>
+                          <li><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-copy"/></svg>Duplicate</li>
+                          <li><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-bookmark"/></svg>Save to collection</li>
+                          <li><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-send"/></svg>Share</li>
+                          <li><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-archive"/></svg>Archive</li>
+                        </ul>
+                      </div>
+                      <pre class="token-code" data-token-code></pre>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage__bar">
+                  <span class="stage__hint">Pick a token and the menu replays with it</span>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p><strong>Five curves and three or four durations</strong> cover most products. Define them as CSS custom properties and mirror them in your design tool.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>One-off magic numbers copied from an old prototype and scattered across the codebase. They drift, and nobody remembers which ones were intentional.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">CSS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="css">:root {
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-short: 200ms;
+  --dur-medium: 320ms;
+  --dur-long: 500ms;
+}
+
+.menu {
+  transition:
+    transform var(--dur-medium) var(--ease-enter),
+    opacity var(--dur-short) linear;
+}</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Summary -->
+        <section class="summary" id="summary" data-toc="★" aria-labelledby="summary-title">
+          <div class="summary__grid">
+            <div>
+              <span class="section-label">Chapter recap</span>
+              <h2 class="summary__title" id="summary-title">What to remember</h2>
+              <ol class="takeaways">
+                <li><span><strong>Linear is for machines.</strong> Spatial motion needs velocity that ramps up and down.</span></li>
+                <li><span><strong>Read curves like graphs:</strong> steep is fast, flat is slow, above the box overshoots.</span></li>
+                <li><span><strong>Match the curve to the direction:</strong> enter with ease-out, exit with ease-in, move across the screen with ease-in-out.</span></li>
+                <li><span><strong>cubic-bezier is two handles:</strong> x stays within 0&ndash;1, y is free to overshoot or anticipate.</span></li>
+                <li><span><strong>linear() expresses any curve,</strong> including springs and bounces. Generate it, and guard it with @supports.</span></li>
+                <li><span><strong>steps() is for discrete states</strong> such as clocks, typewriters and sprites, never for interface movement.</span></li>
+                <li><span><strong>Tokenise curves and durations</strong> so the whole product speaks with one voice.</span></li>
+              </ol>
+            </div>
+            <div class="quiz" data-quiz>
+              <div class="quiz__head"><span class="quiz__title">Check yourself</span><span class="quiz__score"><span data-quiz-score>0</span>/ 3</span></div>
+              <div class="quiz__q" data-answer="1">
+                <p class="quiz__prompt">A notification slides in from the top of the screen. Which curve fits?</p>
+                <div class="quiz__options">
+                  <button class="quiz__opt" type="button"><span>Ease-in</span></button>
+                  <button class="quiz__opt" type="button"><span>Ease-out</span></button>
+                  <button class="quiz__opt" type="button"><span>Linear</span></button>
+                </div>
+                <div class="quiz__why"><p>It is arriving, so it should decelerate into place. Ease-in would reach its resting position at full speed and stop abruptly.</p></div>
+              </div>
+              <div class="quiz__q" data-answer="1">
+                <p class="quiz__prompt">In cubic-bezier(x1, y1, x2, y2), which values may go outside the 0&ndash;1 range?</p>
+                <div class="quiz__options">
+                  <button class="quiz__opt" type="button"><span>x1 and x2</span></button>
+                  <button class="quiz__opt" type="button"><span>y1 and y2</span></button>
+                  <button class="quiz__opt" type="button"><span>None of them</span></button>
+                </div>
+                <div class="quiz__why"><p>x is time, which cannot run backwards, so it must stay within 0&ndash;1. y is progress, which may overshoot above 1 or wind up below 0.</p></div>
+              </div>
+              <div class="quiz__q" data-answer="2">
+                <p class="quiz__prompt">You want a real, oscillating spring feel in a pure-CSS transition. What do you use?</p>
+                <div class="quiz__options">
+                  <button class="quiz__opt" type="button"><span>A cubic-bezier with y above 1</span></button>
+                  <button class="quiz__opt" type="button"><span>steps(12)</span></button>
+                  <button class="quiz__opt" type="button"><span>linear() sampled from a spring function</span></button>
+                </div>
+                <div class="quiz__why"><p>A cubic-bezier can overshoot once but cannot oscillate. linear() samples the spring curve itself, wobbles included.</p></div>
+              </div>
+              <div class="quiz__foot">
+                <p class="quiz__result" data-quiz-result hidden></p>
+                <button class="btn btn--small" type="button" data-quiz-retry hidden>Try again</button>
+              </div>
+            </div>
+          </div>
+          <div class="complete">
+            <button class="complete__btn" type="button" data-complete aria-pressed="false">
+              <span class="complete__box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+              <span data-complete-label>Mark chapter as studied</span>
+            </button>
+          </div>
+        </section>
+
+        <nav class="chapter-nav" data-chapter-nav aria-label="Chapter navigation"><a href="timing.html">← 01 Timing &amp; duration</a><a href="springs.html">03 Springs &amp; physics →</a></nav>
+      </div>
+    </div>
+  </main>
+
+  <footer class="guide-footer">
+    <div class="guide-footer__inner">
+      <span>© 2026 Kinetic · Field guide</span>
+      <span class="guide-footer__links"><a href="../index.html">Showcase</a><a href="index.html">Guide home</a><a href="cheatsheet.html">Cheat sheet</a></span>
+      <span>Press <kbd>M</kbd> to toggle motion</span>
+    </div>
+  </footer>
+</body>
+</html>

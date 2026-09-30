@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en" class="no-js" data-motion="full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Timing &amp; duration — Kinetic field guide</title>
+  <meta name="description" content="Chapter 01 of the Kinetic field guide: how long motion should last, and why size, distance, direction, latency and frame rate change the answer.">
+  <meta name="theme-color" content="#0a0a0d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0d'/%3E%3Cpath d='M16 7v18M8.2 11.5l15.6 9M8.2 20.5l15.6-9' stroke='%23ff5a36' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&amp;family=Space+Grotesk:wght@300..700&amp;display=swap">
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.remove('no-js');
+      root.classList.add('js');
+      try {
+        var stored = localStorage.getItem('kinetic:motion');
+        var reduced = stored ? stored === 'reduced' : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root.setAttribute('data-motion', reduced ? 'reduced' : 'full');
+      } catch (e) {}
+    })();
+  </script>
+  <script nomodule>document.documentElement.classList.add('no-module');</script>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/demos.css">
+  <link rel="stylesheet" href="../css/guide.css">
+  <link rel="stylesheet" href="../css/chapters/timing.css">
+  <script type="module" src="../js/guide.js"></script>
+</head>
+<body data-page="chapter" data-chapter="timing" style="--chapter: var(--gold)">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="cursor" data-cursor-root aria-hidden="true"><div class="cursor__ring"><div class="cursor__shape"></div><span class="cursor__label"></span></div><div class="cursor__dot"></div></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+  <header class="site-header site-header--guide" data-header>
+    <a class="brand" href="../index.html" data-magnetic="0.25">
+      <span class="brand__mark" aria-hidden="true"><svg class="icon"><use href="../assets/icons.svg#i-asterisk"/></svg></span>
+      <span class="brand__word">Kinetic</span>
+      <span class="brand__tag">Field guide</span>
+    </a>
+    <nav class="nav" aria-label="Guide">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="../index.html"><span data-roll>Showcase</span></a></li>
+        <li><a class="nav__link" href="index.html" data-guide-link="guide-index"><span data-roll>Guide</span></a></li>
+        <li><button class="nav__link nav__link--menu" type="button" data-chapter-toggle aria-expanded="false" aria-controls="chapter-menu"><span>Chapters</span><svg class="icon nav__chevron" aria-hidden="true"><use href="../assets/icons.svg#i-chevron"/></svg></button></li>
+        <li><a class="nav__link" href="cheatsheet.html" data-guide-link="cheatsheet"><span data-roll>Cheat sheet</span></a></li>
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="true" title="Toggle motion (M)">
+        <span class="motion-toggle__track" aria-hidden="true"><span class="motion-toggle__thumb"></span></span>
+        <span class="motion-toggle__label">Motion <b data-motion-label>On</b></span>
+      </button>
+      <button class="burger" type="button" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu"><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="chapter-menu" id="chapter-menu" data-chapter-menu hidden><div class="chapter-menu__grid" data-chapter-grid></div></div>
+  <div class="mobile-menu mobile-menu--guide" id="mobile-menu" data-menu hidden>
+    <nav aria-label="Mobile"><ol class="mobile-menu__list" data-mobile-list></ol></nav>
+    <p class="mobile-menu__foot">Kinetic field guide</p>
+  </div>
+
+  <main id="main" class="guide">
+    <header class="chapter-hero">
+      <div>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Field guide</a><span aria-hidden="true">/</span><span>Chapter 01</span></nav>
+        <h1 class="chapter-hero__title" data-split>Timing &amp; duration</h1>
+        <p class="chapter-hero__lede">Before you choose a curve, choose how long. Duration is the loudest control in motion design: the same movement reads as instant, confident or lazy depending on nothing else. This chapter is about picking that number on purpose.</p>
+        <div class="chapter-hero__meta">
+          <span class="meta-chip"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-book"/></svg><b>6</b> lessons</span>
+          <span class="meta-chip"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-clock"/></svg><b>15</b> min</span>
+          <span class="meta-chip"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-check"/></svg><b data-chapter-percent>0%</b> studied</span>
+        </div>
+      </div>
+      <aside class="objectives" aria-label="Learning objectives">
+        <span class="objectives__title">You will learn to</span>
+        <ul>
+          <li>Pick durations from size, distance and how often an interaction happens</li>
+          <li>Scale time with distance so speed feels consistent</li>
+          <li>Give entrances and exits different timing</li>
+          <li>Meet the 100ms feedback deadline even when work is slow</li>
+          <li>Use delay to filter intent instead of adding lag</li>
+        </ul>
+      </aside>
+      <span class="chapter-hero__num" aria-hidden="true">01</span>
+    </header>
+
+    <div class="guide__layout">
+      <aside class="toc" aria-label="Lessons in this chapter">
+        <div class="toc__inner">
+          <span class="toc__title">In this chapter</span>
+          <div class="toc__track"><ol class="toc__list" data-toc-list></ol></div>
+          <div class="toc__progress"><b data-chapter-percent>0%</b> studied<div class="toc__bar"><span data-chapter-bar></span></div></div>
+        </div>
+      </aside>
+
+      <div class="guide__content">
+        <!-- 1.1 -->
+        <section class="lesson" id="durations" data-lesson data-toc="1.1">
+          <div class="lesson__head"><span class="lesson__num">1.1</span><h2 class="lesson__title">Duration sets the mood</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">The six balls below travel the same distance on the same curve. Only the duration changes, and each row has a different personality.</p>
+              <p>People perceive anything under roughly <strong>100ms as instantaneous</strong> and anything over about a second as a wait. Most interface motion lives between those limits: <strong>150&ndash;250ms</strong> for small components such as toggles and chips, <strong>250&ndash;400ms</strong> for dropdowns and cards, and up to about <strong>500ms</strong> for large surfaces like modals and drawers.</p>
+              <p>Past half a second, motion starts to perform for you rather than work for you. That is fine for a rare hero moment and tiring for something you trigger fifty times a day. <strong>Frequency matters as much as size:</strong> the more often an animation runs, the shorter it should be.</p>
+              <p class="try"><b>Try it</b><span>Play the ladder and choose the row that feels right for opening a dropdown. Then choose one for a full-screen dialog. They should not be the same row.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="duration-ladder">
+                <div class="stage__view ladder">
+                  <div class="rail-row" data-duration="100"><span class="rail-row__label">100ms<small>Instant</small></span><div class="rail"><span class="rail__ball"></span></div></div>
+                  <div class="rail-row" data-duration="200"><span class="rail-row__label">200ms<small>Snappy</small></span><div class="rail"><span class="rail__ball"></span></div></div>
+                  <div class="rail-row" data-duration="300"><span class="rail-row__label">300ms<small>Smooth</small></span><div class="rail"><span class="rail__ball"></span></div></div>
+                  <div class="rail-row" data-duration="500"><span class="rail-row__label">500ms<small>Deliberate</small></span><div class="rail"><span class="rail__ball"></span></div></div>
+                  <div class="rail-row" data-duration="800"><span class="rail-row__label">800ms<small>Slow</small></span><div class="rail"><span class="rail__ball"></span></div></div>
+                  <div class="rail-row" data-duration="1200"><span class="rail-row__label">1200ms<small>Sluggish</small></span><div class="rail"><span class="rail__ball"></span></div></div>
+                </div>
+                <div class="stage__bar">
+                  <button class="btn btn--small btn--primary" type="button" data-play><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-play"/></svg><span>Play</span></button>
+                  <button class="chip" type="button" data-loop aria-pressed="false">Loop</button>
+                  <span class="stage__hint">Same distance · same curve · only time changes</span>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Duration is a function of <strong>size, distance and frequency</strong>. Small and frequent means short; large and rare can take longer.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Tuning motion by watching it once in a prototype. What feels elegant on first view feels sluggish the hundredth time, so err shorter than your first instinct.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">CSS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="css">:root {
+  --dur-instant: 100ms;  /* hover, press */
+  --dur-short: 200ms;    /* toggles, chips, checkboxes */
+  --dur-medium: 320ms;   /* dropdowns, tooltips, cards */
+  --dur-long: 500ms;     /* modals, drawers, page panels */
+}
+
+.dropdown {
+  transition: transform var(--dur-medium) cubic-bezier(0.25, 1, 0.5, 1);
+}</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 1.2 -->
+        <section class="lesson" id="distance" data-lesson data-toc="1.2">
+          <div class="lesson__head"><span class="lesson__num">1.2</span><h2 class="lesson__title">Distance changes the clock</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">A fixed duration makes short moves crawl and long moves rush. Scale time with distance so the perceived speed stays consistent.</p>
+              <p>Speed is distance divided by time. If every animation lasts 400ms, a 60px nudge moves at 150px/s while a 600px slide moves at 1,500px/s: ten times faster. The eye reads that as two different objects with two different personalities.</p>
+              <p>Scaling duration linearly overcorrects, because long moves become tediously slow. The usual compromise is the <strong>square root</strong>: doubling the distance adds about 40% more time. Clamp both ends so tiny moves are never shorter than they can be perceived and long ones never drag.</p>
+              <code class="formula">duration = clamp(160ms, 260ms &times; &radic;(distance / 100px), 700ms)</code>
+              <p class="try"><b>Try it</b><span>Press Play and read the speeds under each rail. On the left they differ by a factor of five; on the right they stay within a comfortable range.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="distance-duration">
+                <div class="stage__view">
+                  <div class="compare">
+                    <div class="compare__pane compare__pane--bad" data-mode="fixed">
+                      <span class="pane-label">Fixed 400ms</span>
+                      <div class="dist-rows">
+                        <div class="dist-row" data-fraction="0.18" style="--f:0.18"><div class="rail"><span class="rail__target"></span><span class="rail__ball"></span></div><span class="dist-row__meta" data-meta>Short</span></div>
+                        <div class="dist-row" data-fraction="0.5" style="--f:0.5"><div class="rail"><span class="rail__target"></span><span class="rail__ball"></span></div><span class="dist-row__meta" data-meta>Medium</span></div>
+                        <div class="dist-row" data-fraction="1" style="--f:1"><div class="rail"><span class="rail__target"></span><span class="rail__ball"></span></div><span class="dist-row__meta" data-meta>Long</span></div>
+                      </div>
+                    </div>
+                    <div class="compare__pane compare__pane--good" data-mode="scaled">
+                      <span class="pane-label">Scaled by &radic;distance</span>
+                      <div class="dist-rows">
+                        <div class="dist-row" data-fraction="0.18" style="--f:0.18"><div class="rail"><span class="rail__target"></span><span class="rail__ball"></span></div><span class="dist-row__meta" data-meta>Short</span></div>
+                        <div class="dist-row" data-fraction="0.5" style="--f:0.5"><div class="rail"><span class="rail__target"></span><span class="rail__ball"></span></div><span class="dist-row__meta" data-meta>Medium</span></div>
+                        <div class="dist-row" data-fraction="1" style="--f:1"><div class="rail"><span class="rail__target"></span><span class="rail__ball"></span></div><span class="dist-row__meta" data-meta>Long</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage__bar">
+                  <button class="btn btn--small btn--primary" type="button" data-play><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-play"/></svg><span>Play</span></button>
+                  <span class="stage__hint">Under each rail: duration · average speed</span>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Keep <strong>perceived speed</strong> constant, not duration. The square root of distance is a good default; always clamp both ends.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>One global transition duration for everything, including panels that travel across the whole viewport on desktop but only a few centimetres on a phone.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">JS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="js">function scaledDuration(distance, base = 260, reference = 100) {
+  const ms = base * Math.sqrt(Math.abs(distance) / reference);
+  return Math.min(700, Math.max(160, ms));
+}
+
+const dx = target.x - current.x;
+el.animate(
+  [{ transform: 'translateX(0)' }, { transform: `translateX(${dx}px)` }],
+  { duration: scaledDuration(dx), easing: 'cubic-bezier(0.2, 0, 0, 1)', fill: 'forwards' },
+);</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 1.3 -->
+        <section class="lesson" id="asymmetry" data-lesson data-toc="1.3">
+          <div class="lesson__head"><span class="lesson__num">1.3</span><h2 class="lesson__title">Enter gently, leave quickly</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">Arrivals deserve a moment of grace. Departures should get out of the way.</p>
+              <p>When something appears, the user is waiting for it. A <strong>decelerating entrance</strong> (ease-out) lands softly, and the content becomes readable as it settles. When something leaves, the user has already moved on. An <strong>accelerating exit</strong> (ease-in) that is 30&ndash;40% shorter clears the stage without competing for attention.</p>
+              <p>Symmetric timing makes the dismissal feel like a second, unwanted animation. In CSS it is also the default: one <code>transition</code> rule on the element covers both directions. Put the entrance timing on the open state and the exit timing on the base rule, because the transition that applies is the one on the state you are moving <em>to</em>.</p>
+              <p class="try"><b>Try it</b><span>Open and close both sheets a few times. Watch the closing: on the left it lingers, on the right it is simply gone.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="asymmetry">
+                <div class="stage__view">
+                  <div class="compare">
+                    <div class="compare__pane compare__pane--bad">
+                      <span class="pane-label">Symmetric · 400 / 400ms</span>
+                      <div class="phone phone--sm">
+                        <div class="phone__screen">
+                          <div class="app-lines" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                          <div class="scrim scrim--symmetric"></div>
+                          <div class="sheet sheet--symmetric" aria-hidden="true">
+                            <span class="sheet__grip"></span>
+                            <span class="sheet__title">Share to</span>
+                            <div class="sheet__row"><span><svg class="icon"><use href="../assets/icons.svg#i-mail"/></svg></span><span><svg class="icon"><use href="../assets/icons.svg#i-send"/></svg></span><span><svg class="icon"><use href="../assets/icons.svg#i-copy"/></svg></span><span><svg class="icon"><use href="../assets/icons.svg#i-bookmark"/></svg></span></div>
+                            <div class="sheet__line"></div><div class="sheet__line"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="compare__pane compare__pane--good">
+                      <span class="pane-label">Asymmetric · 340 / 200ms</span>
+                      <div class="phone phone--sm">
+                        <div class="phone__screen">
+                          <div class="app-lines" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                          <div class="scrim scrim--asymmetric"></div>
+                          <div class="sheet sheet--asymmetric" aria-hidden="true">
+                            <span class="sheet__grip"></span>
+                            <span class="sheet__title">Share to</span>
+                            <div class="sheet__row"><span><svg class="icon"><use href="../assets/icons.svg#i-mail"/></svg></span><span><svg class="icon"><use href="../assets/icons.svg#i-send"/></svg></span><span><svg class="icon"><use href="../assets/icons.svg#i-copy"/></svg></span><span><svg class="icon"><use href="../assets/icons.svg#i-bookmark"/></svg></span></div>
+                            <div class="sheet__line"></div><div class="sheet__line"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage__bar">
+                  <button class="btn btn--small btn--primary" type="button" data-toggle-sheet aria-pressed="false"><span data-label>Open both</span></button>
+                  <span class="stage__hint">Watch the closing, not the opening</span>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Exit duration &asymp; <strong>two thirds of the entrance</strong>. Entrances decelerate (ease-out); exits accelerate (ease-in).</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>A single <code>transition</code> on the base rule. It silently gives the exit the same slow, decelerating curve as the entrance.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">CSS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="css">.sheet {
+  transform: translateY(100%);
+  /* Closing: short and accelerating (applies when leaving .is-open) */
+  transition: transform 200ms cubic-bezier(0.3, 0, 0.8, 0.15);
+}
+
+.sheet.is-open {
+  transform: none;
+  /* Opening: longer and decelerating (applies when entering .is-open) */
+  transition: transform 340ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 1.4 -->
+        <section class="lesson" id="latency" data-lesson data-toc="1.4">
+          <div class="lesson__head"><span class="lesson__num">1.4</span><h2 class="lesson__title">Feedback has a deadline</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">Users forgive slow work. They do not forgive silence. Acknowledge every input within 100ms, even if the result takes longer.</p>
+              <p>Classic response-time research (Card, Robertson and Mackinlay, popularised by Jakob Nielsen) describes three limits: about <strong>0.1s</strong> feels instantaneous, about <strong>1s</strong> keeps the user&rsquo;s flow of thought, and about <strong>10s</strong> is the limit of attention.</p>
+              <p>Network requests often cannot meet the first limit, but visual feedback always can: a pressed state, a spinner, a disabled button. That acknowledgement is what makes a 600ms save feel responsive, and it prevents the double submissions that happen when a button appears to do nothing.</p>
+              <p class="try"><b>Try it</b><span>Set the delay to around 600ms and turn acknowledgement off, then press and press again. Watch the extra-click counter. Turn acknowledgement back on: the work takes exactly as long, but it no longer feels broken.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="latency">
+                <div class="stage__view latency">
+                  <div class="latency__center">
+                    <button class="latency__btn" type="button" data-latency-btn>
+                      <span class="latency__label">Save changes</span>
+                      <span class="latency__spinner" aria-hidden="true"></span>
+                      <svg class="latency__check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                    </button>
+                    <p class="latency__status" data-latency-status aria-live="polite">Ready</p>
+                  </div>
+                  <div class="timeline" data-timeline aria-hidden="true">
+                    <div class="timeline__zones">
+                      <span style="--from:0;--to:100"></span>
+                      <span style="--from:100;--to:300"></span>
+                      <span style="--from:300;--to:1000"></span>
+                      <span style="--from:1000;--to:1200"></span>
+                    </div>
+                    <span class="timeline__response" data-timeline-response></span>
+                    <span class="timeline__marker" data-timeline-marker></span>
+                    <div class="timeline__scale"><span>0</span><span>300</span><span>600</span><span>900</span><span>1200ms</span></div>
+                    <ul class="timeline__legend">
+                      <li>Instant <small>&lt; 100ms</small></li>
+                      <li>Noticeable <small>100&ndash;300ms</small></li>
+                      <li>Sluggish <small>300ms&ndash;1s</small></li>
+                      <li>Waiting <small>&gt; 1s</small></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="stage__bar">
+                  <label class="control control--grow">
+                    <span class="control__label">Response delay <output data-latency-out>600ms</output></span>
+                    <input class="range" type="range" min="0" max="1200" step="20" value="600" data-latency-delay>
+                  </label>
+                  <button class="chip" type="button" data-latency-ack aria-pressed="true">Instant acknowledgement</button>
+                  <span class="readout">Extra clicks while waiting <b data-latency-extra>0</b></span>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Separate <strong>acknowledgement</strong> (always under 100ms) from <strong>completion</strong> (whenever the work is done). Motion bridges the gap between the two.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Waiting for the server before showing any pressed or loading state. Users click again, and now you have two orders, two messages or two payments.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">JS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="js">button.addEventListener('click', async () => {
+  if (button.dataset.busy) return;          // ignore repeat clicks
+  button.dataset.busy = 'true';
+  button.classList.add('is-busy');          // under 100ms: acknowledge
+  try {
+    await save();                           // however long it takes
+    button.classList.add('is-done');        // then confirm
+  } finally {
+    button.classList.remove('is-busy');
+    delete button.dataset.busy;
+  }
+});</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 1.5 -->
+        <section class="lesson" id="framerate" data-lesson data-toc="1.5">
+          <div class="lesson__head"><span class="lesson__num">1.5</span><h2 class="lesson__title">Frames make the motion</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">Smoothness is sampling. The same curve drawn sixty times a second looks like motion; drawn eight times a second it looks like a slideshow.</p>
+              <p>Displays refresh 60 times a second, and 120 or more on many phones and laptops. That gives each frame a budget of <strong>16.7ms</strong> (or 8.3ms at 120Hz) for your JavaScript, style recalculation, layout, paint and compositing. Miss the deadline and the browser drops a frame: the object freezes for a beat, then jumps.</p>
+              <p>Drops are most visible during <strong>slow, steady movement</strong>, such as the long tail of an ease-out, because the eye can track the object precisely. That is why jank tends to show up at the end of an animation rather than in the middle of a fast flick.</p>
+              <p class="try"><b>Try it</b><span>Compare the 60fps and 30fps rows. The 30fps row looks acceptable on its own until you see them together. Now watch the slow ends of each swing, where stepping is easiest to see.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="framerate">
+                <div class="stage__view ladder">
+                  <div class="rail-row" data-fps="60"><span class="rail-row__label">60 fps<small>16.7ms</small></span><div class="rail"><span class="rail__ball"></span></div></div>
+                  <div class="rail-row" data-fps="30"><span class="rail-row__label">30 fps<small>33.3ms</small></span><div class="rail"><span class="rail__ball"></span></div></div>
+                  <div class="rail-row" data-fps="15"><span class="rail-row__label">15 fps<small>66.7ms</small></span><div class="rail"><span class="rail__ball"></span></div></div>
+                  <div class="rail-row" data-fps="8"><span class="rail-row__label">8 fps<small>125ms</small></span><div class="rail"><span class="rail__ball"></span></div></div>
+                </div>
+                <div class="stage__bar">
+                  <button class="btn btn--small btn--icon" type="button" data-toggle aria-label="Pause"><svg class="icon icon--pause" aria-hidden="true"><use href="../assets/icons.svg#i-pause"/></svg><svg class="icon icon--play" aria-hidden="true"><use href="../assets/icons.svg#i-play"/></svg></button>
+                  <span class="readout">Your display ≈ <b data-refresh>—</b> Hz</span>
+                  <span class="stage__hint">One sine wave, sampled less often</span>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p>The budget is <strong>16.7ms per frame at 60Hz</strong>. Animate <code>transform</code> and <code>opacity</code> so most frames skip layout and paint entirely (chapter 09 shows why).</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Driving animation with <code>setTimeout</code> or <code>setInterval</code>. Timers drift, ignore the display&rsquo;s refresh and keep running in background tabs. Use <code>requestAnimationFrame</code>, CSS or the Web Animations API.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">JS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="js">let last = performance.now();
+let x = 0;
+const velocity = 240; // px per second
+
+function frame(now) {
+  const dt = Math.min((now - last) / 1000, 0.1); // seconds since the last frame
+  last = now;
+  x += velocity * dt;                             // frame-rate independent
+  box.style.transform = `translateX(${x}px)`;
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 1.6 -->
+        <section class="lesson" id="intent" data-lesson data-toc="1.6">
+          <div class="lesson__head"><span class="lesson__num">1.6</span><h2 class="lesson__title">Delay with intent</h2></div>
+          <div class="lesson__grid">
+            <div class="lesson__text prose">
+              <p class="lesson__lede">Delay is a feature when it filters intent. A tooltip that waits 400ms ignores a pointer that is only passing through.</p>
+              <p>Hover is ambiguous: the pointer crosses elements on its way somewhere else. A short <strong>intent delay</strong> suppresses accidental reveals. Once the user has shown intent and one tooltip is open, neighbours should respond <strong>instantly</strong>, because the user is now exploring. Keep the group &ldquo;warm&rdquo; for a moment after the pointer leaves, so returning does not start the wait over.</p>
+              <p>Menus use the mirror image: a short <strong>grace period</strong> before closing, so a diagonal mouse path towards a submenu does not snap it shut.</p>
+              <p class="try"><b>Try it</b><span>Sweep quickly across both bars. The top one flashes every tooltip; the bottom one stays calm. Then rest on one icon in the bottom bar and slide sideways: once it is warm, it glides instantly.</span></p>
+            </div>
+            <figure class="lesson__demo">
+              <div class="stage" data-demo="hover-intent">
+                <div class="stage__view intent">
+                  <div class="intent__group" data-intent-group="instant">
+                    <span class="pane-label">No delay</span>
+                    <div class="intent__bar">
+                      <button class="intent__btn" type="button" data-tip="Home" aria-label="Home"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-home"/></svg></button>
+                      <button class="intent__btn" type="button" data-tip="Search" aria-label="Search"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-search"/></svg></button>
+                      <button class="intent__btn" type="button" data-tip="Inbox" aria-label="Inbox"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-inbox"/></svg></button>
+                      <button class="intent__btn" type="button" data-tip="Saved" aria-label="Saved"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-bookmark"/></svg></button>
+                      <button class="intent__btn" type="button" data-tip="Settings" aria-label="Settings"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-settings"/></svg></button>
+                      <span class="tip" role="tooltip" data-tip-el></span>
+                    </div>
+                  </div>
+                  <div class="intent__group" data-intent-group="intent">
+                    <span class="pane-label">400ms intent · instant while warm</span>
+                    <div class="intent__bar">
+                      <button class="intent__btn" type="button" data-tip="Home" aria-label="Home"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-home"/></svg></button>
+                      <button class="intent__btn" type="button" data-tip="Search" aria-label="Search"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-search"/></svg></button>
+                      <button class="intent__btn" type="button" data-tip="Inbox" aria-label="Inbox"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-inbox"/></svg></button>
+                      <button class="intent__btn" type="button" data-tip="Saved" aria-label="Saved"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-bookmark"/></svg></button>
+                      <button class="intent__btn" type="button" data-tip="Settings" aria-label="Settings"><svg class="icon" aria-hidden="true"><use href="../assets/icons.svg#i-settings"/></svg></button>
+                      <span class="tip" role="tooltip" data-tip-el></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage__bar">
+                  <span class="readout">Tooltips shown · no delay <b data-count="instant">0</b> · with intent <b data-count="intent">0</b></span>
+                  <button class="chip" type="button" data-reset-counts>Reset</button>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <div class="lesson__notes">
+            <aside class="callout callout--key"><span class="callout__label">Key idea</span><p>Wait <strong>300&ndash;500ms</strong> before opening, respond <strong>instantly while warm</strong>, and allow a <strong>100&ndash;300ms grace</strong> before closing.</p></aside>
+            <aside class="callout callout--warn"><span class="callout__label">Pitfall</span><p>Adding delay everywhere. On clicks, key presses and primary actions, delay reads as lag. Keyboard focus is explicit intent, so show focus tooltips immediately.</p></aside>
+            <details class="snippet">
+              <summary><span class="snippet__label">How it&rsquo;s built</span><span class="snippet__lang">JS</span></summary>
+              <div class="snippet__body"><pre><code data-lang="js">let warmUntil = 0;
+let openTimer;
+let closeTimer;
+
+function onEnter(item) {
+  clearTimeout(openTimer);
+  clearTimeout(closeTimer);            // cancel the previous item's pending close
+  const warm = tooltipIsOpen() || performance.now() &lt; warmUntil;
+  if (warm) showTooltip(item);         // instant while warm
+  else openTimer = setTimeout(() =&gt; showTooltip(item), 400);
+}
+
+function onLeave() {
+  clearTimeout(openTimer);
+  clearTimeout(closeTimer);
+  if (tooltipIsOpen()) warmUntil = performance.now() + 300;
+  closeTimer = setTimeout(hideTooltip, 140); // grace period for diagonal paths
+}</code></pre></div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Summary -->
+        <section class="summary" id="summary" data-toc="★" aria-labelledby="summary-title">
+          <div class="summary__grid">
+            <div>
+              <span class="section-label">Chapter recap</span>
+              <h2 class="summary__title" id="summary-title">What to remember</h2>
+              <ol class="takeaways">
+                <li><span><strong>Duration scales with size, distance and frequency.</strong> Small, frequent interactions: 100&ndash;250ms. Large, rare ones: up to about 500ms.</span></li>
+                <li><span><strong>Keep perceived speed constant.</strong> Scale duration with the square root of distance and clamp both ends.</span></li>
+                <li><span><strong>Enter decelerating, exit accelerating.</strong> Exits run about two thirds as long as entrances.</span></li>
+                <li><span><strong>Acknowledge every input within 100ms,</strong> even when the result takes seconds.</span></li>
+                <li><span><strong>Budget 16.7ms per frame</strong> and drive motion with requestAnimationFrame, CSS or WAAPI, never timers.</span></li>
+                <li><span><strong>Use delay to filter intent,</strong> then respond instantly once the user is engaged.</span></li>
+              </ol>
+            </div>
+            <div class="quiz" data-quiz>
+              <div class="quiz__head"><span class="quiz__title">Check yourself</span><span class="quiz__score"><span data-quiz-score>0</span>/ 3</span></div>
+              <div class="quiz__q" data-answer="1">
+                <p class="quiz__prompt">A checkbox animation runs every time someone ticks an item in a long list. Which duration fits best?</p>
+                <div class="quiz__options">
+                  <button class="quiz__opt" type="button"><span>600ms</span></button>
+                  <button class="quiz__opt" type="button"><span>180ms</span></button>
+                  <button class="quiz__opt" type="button"><span>40ms</span></button>
+                </div>
+                <div class="quiz__why"><p>Small, frequent interactions want short durations. At 40ms the change is too brief to register as motion, and 600ms becomes tedious by the tenth tick.</p></div>
+              </div>
+              <div class="quiz__q" data-answer="1">
+                <p class="quiz__prompt">Two panels animate with the same fixed duration: one moves 60px, the other 900px. What happens?</p>
+                <div class="quiz__options">
+                  <button class="quiz__opt" type="button"><span>Both feel equally fast</span></button>
+                  <button class="quiz__opt" type="button"><span>The short one crawls and the long one rushes</span></button>
+                  <button class="quiz__opt" type="button"><span>Only the easing curve is affected</span></button>
+                </div>
+                <div class="quiz__why"><p>Speed is distance over time. With a fixed duration the long panel moves fifteen times faster. Scale duration with the square root of distance instead.</p></div>
+              </div>
+              <div class="quiz__q" data-answer="2">
+                <p class="quiz__prompt">A save request takes 700ms. What should the button do the moment it is clicked?</p>
+                <div class="quiz__options">
+                  <button class="quiz__opt" type="button"><span>Nothing until the request finishes</span></button>
+                  <button class="quiz__opt" type="button"><span>Wait 300ms, so the response feels deliberate</span></button>
+                  <button class="quiz__opt" type="button"><span>Show a pressed or loading state within 100ms</span></button>
+                </div>
+                <div class="quiz__why"><p>Acknowledgement must be immediate even when completion is not. A loading state also prevents repeat clicks from submitting twice.</p></div>
+              </div>
+              <div class="quiz__foot">
+                <p class="quiz__result" data-quiz-result hidden></p>
+                <button class="btn btn--small" type="button" data-quiz-retry hidden>Try again</button>
+              </div>
+            </div>
+          </div>
+          <div class="complete">
+            <button class="complete__btn" type="button" data-complete aria-pressed="false">
+              <span class="complete__box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+              <span data-complete-label>Mark chapter as studied</span>
+            </button>
+          </div>
+        </section>
+
+        <nav class="chapter-nav" data-chapter-nav aria-label="Chapter navigation"></nav>
+      </div>
+    </div>
+  </main>
+
+  <footer class="guide-footer">
+    <div class="guide-footer__inner">
+      <span>© 2026 Kinetic · Field guide</span>
+      <span class="guide-footer__links"><a href="../index.html">Showcase</a><a href="index.html">Guide home</a><a href="cheatsheet.html">Cheat sheet</a></span>
+      <span>Press <kbd>M</kbd> to toggle motion</span>
+    </div>
+  </footer>
+</body>
+</html>

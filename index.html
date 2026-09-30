@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en" class="no-js" data-motion="full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kinetic — Motion Design &amp; Micro-interaction Portfolio</title>
+  <meta name="description" content="An interactive portfolio of motion design and micro-interactions: easing, springs, choreography, FLIP layout transitions and tactile feedback, built with vanilla HTML, CSS and JavaScript.">
+  <meta name="theme-color" content="#0a0a0d">
+  <meta property="og:title" content="Kinetic — Motion Design Portfolio">
+  <meta property="og:description" content="Interfaces that feel alive. A living catalogue of motion and micro-interactions.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0d'/%3E%3Cpath d='M16 7v18M8.2 11.5l15.6 9M8.2 20.5l15.6-9' stroke='%23ff5a36' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&amp;family=Space+Grotesk:wght@300..700&amp;display=swap">
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.remove('no-js');
+      root.classList.add('js');
+      try {
+        var stored = localStorage.getItem('kinetic:motion');
+        var reduced = stored ? stored === 'reduced' : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root.setAttribute('data-motion', reduced ? 'reduced' : 'full');
+      } catch (e) {}
+    })();
+  </script>
+  <script nomodule>document.documentElement.classList.add('no-module');</script>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/demos.css">
+  <link rel="stylesheet" href="css/guide.css">
+  <link rel="stylesheet" href="css/showcase-guide.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body data-page="showcase">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Icon sprite -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-asterisk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8.5 5.5v13M15.5 5.5v13"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8.5a1.5 1.5 0 01-1.5 1.5H15v-6H9v6H5.5A1.5 1.5 0 014 19.5z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5l2.6-7.6A2 2 0 018 4.5h8a2 2 0 011.9 1.4l2.6 7.6v5a1.5 1.5 0 01-1.5 1.5H5a1.5 1.5 0 01-1.5-1.5z"/><path d="M3.5 13.5H8l1.5 2.5h5l1.5-2.5h4.5"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20.5c1.2-3.6 4.1-5.5 7.5-5.5s6.3 1.9 7.5 5.5"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 10-2.3 5.7M20 4v7h-7"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-heart-fill" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.4-9.5-9.2C1.2 8 3 4.5 6.6 4.1c2-.2 3.7.8 5.4 2.8 1.7-2 3.4-3 5.4-2.8C21 4.5 22.8 8 21.5 11.3c-2 4.8-9.5 9.2-9.5 9.2z"/></symbol>
+  </svg>
+
+  <!-- Preloader -->
+  <div class="preloader" data-preloader aria-hidden="true">
+    <div class="preloader__panel preloader__panel--accent"></div>
+    <div class="preloader__panel preloader__panel--ink">
+      <div class="preloader__inner">
+        <div class="preloader__top">
+          <span class="preloader__brand"><svg class="icon"><use href="#i-asterisk"/></svg> Kinetic</span>
+          <span>Motion portfolio — Vol. 01</span>
+        </div>
+        <div class="preloader__words" data-preloader-words>
+          <span>Easing</span><span>Springs</span><span>Timing</span><span>Feedback</span><span>Kinetic</span>
+        </div>
+        <div class="preloader__bottom">
+          <div class="preloader__count" data-preloader-count>000</div>
+          <div class="preloader__bar"><span data-preloader-bar></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom cursor -->
+  <div class="cursor" data-cursor-root aria-hidden="true">
+    <div class="cursor__ring"><div class="cursor__shape"></div><span class="cursor__label"></span></div>
+    <div class="cursor__dot"></div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+  <!-- Header -->
+  <header class="site-header" data-header>
+    <a class="brand" href="#top" data-magnetic="0.25">
+      <span class="brand__mark" aria-hidden="true"><svg class="icon"><use href="#i-asterisk"/></svg></span>
+      <span class="brand__word">Kinetic</span>
+      <span class="brand__tag">®</span>
+    </a>
+
+    <nav class="nav" aria-label="Sections">
+      <ul class="nav__list" data-nav-list>
+        <li><a class="nav__link" href="#easing" data-nav-link><small>01</small><span data-roll>Easing</span></a></li>
+        <li><a class="nav__link" href="#interactions" data-nav-link><small>02</small><span data-roll>Interactions</span></a></li>
+        <li><a class="nav__link" href="#physics" data-nav-link><small>03</small><span data-roll>Physics</span></a></li>
+        <li><a class="nav__link" href="#principles" data-nav-link><small>04</small><span data-roll>Principles</span></a></li>
+        <li><a class="nav__link" href="#layout" data-nav-link><small>05</small><span data-roll>Layout</span></a></li>
+        <li><a class="nav__link" href="#depth" data-nav-link><small>06</small><span data-roll>Depth</span></a></li>
+        <li><a class="nav__link nav__link--guide" href="guide/index.html"><small>07</small><span data-roll>Field guide</span></a></li>
+      </ul>
+      <span class="nav__indicator" data-nav-indicator aria-hidden="true"></span>
+    </nav>
+
+    <div class="header__actions">
+      <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="true" title="Toggle motion (M)">
+        <span class="motion-toggle__track" aria-hidden="true"><span class="motion-toggle__thumb"></span></span>
+        <span class="motion-toggle__label">Motion <b data-motion-label>On</b></span>
+      </button>
+      <button class="burger" type="button" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" data-menu hidden>
+    <nav aria-label="Mobile">
+      <ol class="mobile-menu__list">
+        <li style="--i:0"><a href="#easing"><small>01</small>Easing</a></li>
+        <li style="--i:1"><a href="#interactions"><small>02</small>Interactions</a></li>
+        <li style="--i:2"><a href="#physics"><small>03</small>Physics</a></li>
+        <li style="--i:3"><a href="#principles"><small>04</small>Principles</a></li>
+        <li style="--i:4"><a href="#layout"><small>05</small>Layout</a></li>
+        <li style="--i:5"><a href="#depth"><small>06</small>Depth</a></li>
+        <li style="--i:6"><a href="guide/index.html"><small>07</small>Field guide</a></li>
+      </ol>
+    </nav>
+    <p class="mobile-menu__foot">A portfolio of motion &amp; micro-interactions</p>
+  </div>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" id="top" data-hero>
+      <canvas class="hero__field" data-hero-field aria-hidden="true"></canvas>
+      <div class="hero__meta" aria-hidden="true">
+        <span>X <b data-coord-x>0000</b></span>
+        <span>Y <b data-coord-y>0000</b></span>
+        <span><b data-fps>60</b> FPS</span>
+      </div>
+      <div class="hero__inner">
+        <p class="hero__eyebrow"><span class="dot-live" aria-hidden="true"></span>Motion &amp; interaction portfolio — 2026</p>
+        <h1 class="hero__title" data-hero-title>
+          <span class="hero__line">Interfaces</span>
+          <span class="hero__line">that feel</span>
+          <span class="hero__line hero__line--accent">alive.</span>
+        </h1>
+        <div class="hero__bottom">
+          <p class="hero__lede">A living catalogue of easing, springs, choreography and feedback. Everything on this page is a demonstration: move your cursor, click anywhere, grab things. The field guide explains the decisions behind the motion.</p>
+          <a class="hero__scroll" href="#manifesto" data-magnetic="0.3">
+            <span class="hero__scroll-text">Scroll to explore</span>
+            <span class="hero__scroll-line" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" data-marquee="1" aria-hidden="true">
+      <div class="marquee__track">
+        <div class="marquee__group">
+          <span class="marquee__item">Easing</span><svg class="marquee__star"><use href="#i-asterisk"/></svg>
+          <span class="marquee__item marquee__item--outline">Springs</span><svg class="marquee__star"><use href="#i-asterisk"/></svg>
+          <span class="marquee__item">Choreography</span><svg class="marquee__star"><use href="#i-asterisk"/></svg>
+          <span class="marquee__item marquee__item--outline">Feedback</span><svg class="marquee__star"><use href="#i-asterisk"/></svg>
+          <span class="marquee__item">Physics</span><svg class="marquee__star"><use href="#i-asterisk"/></svg>
+          <span class="marquee__item marquee__item--outline">Anticipation</span><svg class="marquee__star"><use href="#i-asterisk"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="marquee marquee--code" data-marquee="-0.6" aria-hidden="true">
+      <div class="marquee__track">
+        <div class="marquee__group">
+          <span class="marquee__code">cubic-bezier(0.16, 1, 0.3, 1)</span>
+          <span class="marquee__code">stiffness: 180</span>
+          <span class="marquee__code">damping: 12</span>
+          <span class="marquee__code">stagger: 40ms</span>
+          <span class="marquee__code">will-change: transform</span>
+          <span class="marquee__code">prefers-reduced-motion</span>
+          <span class="marquee__code">requestAnimationFrame</span>
+          <span class="marquee__code">FLIP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANIFESTO -->
+    <section class="manifesto" id="manifesto" data-manifesto>
+      <div class="manifesto__sticky">
+        <span class="section-label" data-scramble>00 — Manifesto</span>
+        <p class="manifesto__text" data-manifesto-text>Motion is not decoration. It is the <em>connective tissue</em> of an interface. It explains where things come from, <em>confirms</em> what just happened, and quietly directs attention to what matters next. Every duration, every curve, every delay is a <em>design decision.</em></p>
+        <div class="manifesto__foot">
+          <span class="manifesto__progress"><b data-manifesto-progress>0</b>%</span>
+          <span class="manifesto__hint">Scroll-linked, not time-based</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 EASING -->
+    <section class="section" id="easing" data-section>
+      <header class="section__head">
+        <span class="section-label" data-scramble>01 — Timing &amp; Easing</span>
+        <h2 class="section__title" data-split>The curve is the character.</h2>
+        <p class="section__lede" data-reveal>Drag the handles. The same duration feels lazy, eager, playful or mechanical depending on nothing but the shape of this curve. Every preview below runs on one solver.</p>
+        <p class="section__study"><a href="guide/easing.html">Study in chapter 02 →</a></p>
+      </header>
+
+      <div class="bezier" data-bezier data-reveal>
+        <div class="panel bezier__graph">
+          <div class="panel__head">
+            <span class="panel__title">Curve editor</span>
+            <span class="panel__hint">Drag or use arrow keys</span>
+          </div>
+          <svg class="bezier__svg" viewBox="-40 -140 380 580" data-bezier-svg role="group" aria-label="Cubic bezier curve editor">
+            <rect class="bezier__frame" x="0" y="0" width="300" height="300" rx="4"/>
+            <g class="bezier__grid">
+              <line x1="75" y1="0" x2="75" y2="300"/><line x1="150" y1="0" x2="150" y2="300"/><line x1="225" y1="0" x2="225" y2="300"/>
+              <line x1="0" y1="75" x2="300" y2="75"/><line x1="0" y1="150" x2="300" y2="150"/><line x1="0" y1="225" x2="300" y2="225"/>
+            </g>
+            <line class="bezier__linear" x1="0" y1="300" x2="300" y2="0"/>
+            <text class="bezier__axis" x="0" y="326">Time</text>
+            <text class="bezier__axis" x="300" y="326" text-anchor="end">1.0</text>
+            <text class="bezier__axis" x="-12" y="4" text-anchor="end">1</text>
+            <text class="bezier__axis" x="-12" y="304" text-anchor="end">0</text>
+            <line class="bezier__playhead" data-playhead x1="0" y1="-130" x2="0" y2="430"/>
+            <line class="bezier__arm bezier__arm--1" data-arm="1" x1="0" y1="300" x2="0" y2="300"/>
+            <line class="bezier__arm bezier__arm--2" data-arm="2" x1="300" y1="0" x2="300" y2="0"/>
+            <path class="bezier__curve" data-curve d="M0 300 C0 300 300 0 300 0"/>
+            <circle class="bezier__anchor" cx="0" cy="300" r="5"/>
+            <circle class="bezier__anchor" cx="300" cy="0" r="5"/>
+            <circle class="bezier__progress" data-progress-dot r="7" cx="0" cy="300"/>
+            <g class="bezier__handle bezier__handle--1" data-handle="0" tabindex="0" role="slider" aria-label="Control point 1" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">
+              <circle class="bezier__hit" r="24"/><circle class="bezier__knob" r="10"/>
+            </g>
+            <g class="bezier__handle bezier__handle--2" data-handle="1" tabindex="0" role="slider" aria-label="Control point 2" aria-valuemin="0" aria-valuemax="1" aria-valuenow="1">
+              <circle class="bezier__hit" r="24"/><circle class="bezier__knob" r="10"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="panel bezier__side">
+          <div class="panel__head">
+            <span class="panel__title">Presets</span>
+            <span class="panel__hint">Curves morph between each other</span>
+          </div>
+          <div class="chips" role="group" aria-label="Easing presets" data-bezier-presets>
+            <button class="chip" type="button" data-preset="linear" aria-pressed="false">Linear</button>
+            <button class="chip" type="button" data-preset="ease" aria-pressed="false">Ease</button>
+            <button class="chip" type="button" data-preset="easeInOut" aria-pressed="false">In-out</button>
+            <button class="chip" type="button" data-preset="outExpo" aria-pressed="false">Out expo</button>
+            <button class="chip" type="button" data-preset="outBack" aria-pressed="true">Out back</button>
+            <button class="chip" type="button" data-preset="inOutBack" aria-pressed="false">In-out back</button>
+            <button class="chip" type="button" data-preset="anticipate" aria-pressed="false">Anticipate</button>
+            <button class="chip" type="button" data-preset="snap" aria-pressed="false">Snap</button>
+          </div>
+
+          <div class="tracks">
+            <div class="track">
+              <span class="track__label">Your curve</span>
+              <div class="track__rail" data-rail><span class="track__ball" data-ball="curve"></span></div>
+            </div>
+            <div class="track track--ghost">
+              <span class="track__label">Linear</span>
+              <div class="track__rail"><span class="track__ball" data-ball="linear"></span></div>
+            </div>
+          </div>
+
+          <div class="props">
+            <div class="prop"><div class="prop__stage"><span class="prop__box" data-prop="scale"></span></div><span class="prop__label">Scale</span></div>
+            <div class="prop"><div class="prop__stage"><span class="prop__box" data-prop="rotate"></span></div><span class="prop__label">Rotate</span></div>
+            <div class="prop"><div class="prop__stage"><span class="prop__box" data-prop="opacity"></span></div><span class="prop__label">Opacity</span></div>
+            <div class="prop"><div class="prop__stage"><span class="prop__bar" data-prop="width"></span></div><span class="prop__label">Width</span></div>
+          </div>
+
+          <div class="bezier__controls">
+            <button class="btn btn--icon" type="button" data-bezier-toggle aria-label="Pause preview">
+              <svg class="icon icon--pause"><use href="#i-pause"/></svg>
+              <svg class="icon icon--play"><use href="#i-play"/></svg>
+            </button>
+            <label class="control control--inline">
+              <span class="control__label">Duration <output data-bezier-duration-out>1000ms</output></span>
+              <input class="range" type="range" min="200" max="2400" step="50" value="1000" data-bezier-duration>
+            </label>
+          </div>
+
+          <div class="code-chip">
+            <code data-bezier-code>cubic-bezier(0.34, 1.56, 0.64, 1)</code>
+            <button class="code-chip__btn" type="button" data-copy-code>
+              <svg class="icon"><use href="#i-copy"/></svg><span data-copy-code-label>Copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 MICRO-INTERACTIONS -->
+    <section class="section" id="interactions" data-section>
+      <header class="section__head">
+        <span class="section-label" data-scramble>02 — Micro-interactions</span>
+        <h2 class="section__title" data-split>Small moments, big feelings.</h2>
+        <p class="section__lede" data-reveal>Twelve tiny components, each tuned for one job: feedback, affordance, state change or delight. They are all live, keyboard accessible and respect reduced-motion.</p>
+        <p class="section__study"><a href="guide/feedback.html">Study in chapter 04 →</a></p>
+      </header>
+
+      <div class="demos" data-demos>
+        <!-- 01 Hold to confirm -->
+        <article class="demo" data-demo="hold" data-reveal>
+          <div class="demo__stage">
+            <button class="hold" type="button" data-hold>
+              <span class="hold__fill" aria-hidden="true"></span>
+              <span class="hold__content">
+                <svg class="icon hold__icon"><use href="#i-trash"/></svg>
+                <svg class="hold__check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                <span data-hold-text>Hold to delete</span>
+              </span>
+            </button>
+            <p class="demo__hint">Press and hold — release early to rewind</p>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.01</span>
+            <h3>Hold to confirm</h3>
+            <p>Deliberate friction for destructive actions. Progress fills while pressed and rewinds faster when released.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>Deliberate friction gives a destructive-looking action time to be cancelled. This demo deletes no data.</span></li>
+              <li><b>Timing</b><span>Keep holding to complete; release early and progress rewinds faster than it filled.</span></li>
+              <li><b>Mechanism</b><span>Press state drives a progress value, a scaled fill and a clipped label overlay; completion replaces the trash icon with a check.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+
+        <!-- 02 Like burst -->
+        <article class="demo" data-demo="like" data-reveal>
+          <div class="demo__stage">
+            <button class="like" type="button" data-like aria-pressed="false" aria-label="Like">
+              <span class="like__icon">
+                <span class="like__ring" aria-hidden="true"></span>
+                <svg class="like__heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.4-9.5-9.2C1.2 8 3 4.5 6.6 4.1c2-.2 3.7.8 5.4 2.8 1.7-2 3.4-3 5.4-2.8C21 4.5 22.8 8 21.5 11.3c-2 4.8-9.5 9.2-9.5 9.2z"/></svg>
+              </span>
+              <span class="like__count" data-like-count>1,284</span>
+            </button>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.02</span>
+            <h3>Like burst</h3>
+            <p>Anticipation, pop and particles reward the action; the counter rolls in the direction of change.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>The filled heart and pressed state carry the answer after the celebration ends.</span></li>
+              <li><b>Timing</b><span>A brief squeeze precedes the pop; the ring and particles disperse while the new count remains.</span></li>
+              <li><b>Mechanism</b><span>A native button toggles <code>aria-pressed</code>, heart classes and a shared rolling counter. Clicking again removes the like.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+
+        <!-- 03 Day / night switch -->
+        <article class="demo" data-demo="switch" data-reveal>
+          <div class="demo__stage sky" data-sky>
+            <span class="sky__night" aria-hidden="true"></span>
+            <span class="sky__stars" aria-hidden="true">
+              <i style="--x:14%;--y:20%;--d:0s"></i><i style="--x:28%;--y:62%;--d:.4s"></i><i style="--x:42%;--y:14%;--d:.9s"></i>
+              <i style="--x:70%;--y:24%;--d:.2s"></i><i style="--x:84%;--y:58%;--d:1.2s"></i><i style="--x:60%;--y:76%;--d:.7s"></i>
+              <i style="--x:20%;--y:82%;--d:1.5s"></i><i style="--x:90%;--y:12%;--d:.5s"></i>
+            </span>
+            <span class="sky__cloud sky__cloud--a" aria-hidden="true"></span>
+            <span class="sky__cloud sky__cloud--b" aria-hidden="true"></span>
+            <button class="switch" type="button" role="switch" aria-checked="false" aria-label="Night mode" data-switch>
+              <span class="switch__thumb">
+                <svg class="switch__icon switch__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+                <svg class="switch__icon switch__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></svg>
+              </span>
+            </button>
+            <p class="sky__caption" data-switch-caption>Day</p>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.03</span>
+            <h3>Squash &amp; stretch switch</h3>
+            <p>The thumb stretches while pressed and springs across; the whole scene answers the state change.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>The thumb, scene and Day/Night caption all describe the same selected state.</span></li>
+              <li><b>Timing</b><span>Stretch lasts only while pressed. Spring-shaped travel settles before the slower sky transition finishes.</span></li>
+              <li><b>Mechanism</b><span><code>aria-checked</code> selects the endpoint; CSS widens the active thumb and translates it using the shared spring easing, with a cubic-bezier fallback.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+
+        <!-- 04 Submit morph -->
+        <article class="demo" data-demo="send" data-reveal>
+          <div class="demo__stage">
+            <button class="send" type="button" data-send data-state="idle">
+              <span class="send__label">Send message</span>
+              <svg class="send__spinner" viewBox="0 0 50 50" aria-hidden="true"><circle cx="25" cy="25" r="19"/></svg>
+              <svg class="send__check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            </button>
+            <p class="sr-only" aria-live="polite" data-send-status></p>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.04</span>
+            <h3>Morphing submit</h3>
+            <p>One element carries the whole journey: idle, loading and success, so attention never has to jump.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>Idle, loading and done occupy the same location, keeping attention on the result.</span></li>
+              <li><b>Timing</b><span>Loading appears before the simulated work completes; success holds briefly before the button returns to idle.</span></li>
+              <li><b>Mechanism</b><span><code>data-state</code> coordinates width, spinner and check, alongside a live status message. A local timer simulates sending; no message or network request is sent.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+
+        <!-- 05 Checklist -->
+        <article class="demo" data-demo="checklist" data-reveal>
+          <div class="demo__stage demo__stage--top">
+            <div class="checklist">
+              <ul class="checklist__list">
+                <li><label class="check"><input type="checkbox" checked><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Pick an easing curve</span></label></li>
+                <li><label class="check"><input type="checkbox"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Tune the spring</span></label></li>
+                <li><label class="check"><input type="checkbox"><span class="check__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="check__text">Ship it</span></label></li>
+              </ul>
+              <div class="checklist__progress" aria-hidden="true"><span data-checklist-bar></span></div>
+              <p class="checklist__status" data-checklist-status aria-live="polite">1 of 3 done</p>
+            </div>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.05</span>
+            <h3>Drawn checkboxes</h3>
+            <p>Strokes draw on, labels strike through and progress eases forward. Completion earns a celebration.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>Each check confirms one choice; the bar and text explain how much of the whole list is done.</span></li>
+              <li><b>Timing</b><span>The box responds first, then its check draws and the label strikes through. Aggregate progress eases to the new fraction.</span></li>
+              <li><b>Mechanism</b><span>Native checkbox state styles an SVG dash offset and label line. JavaScript counts checked inputs and scales the progress bar.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+
+        <!-- 06 Input validation -->
+        <article class="demo" data-demo="field" data-reveal>
+          <div class="demo__stage">
+            <form class="field" data-field novalidate>
+              <div class="field__control" data-field-control>
+                <input class="field__input" id="demo-email" type="email" placeholder=" " autocomplete="off" spellcheck="false" aria-describedby="demo-email-msg">
+                <label class="field__label" for="demo-email">Email address</label>
+                <span class="field__line" aria-hidden="true"></span>
+                <svg class="field__ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+              </div>
+              <p class="field__msg" id="demo-email-msg" data-field-msg aria-live="polite"></p>
+              <button class="btn btn--small" type="submit">Validate</button>
+            </form>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.06</span>
+            <h3>Floating label &amp; validation</h3>
+            <p>The label makes room instead of vanishing. Errors shake (a universal “no”), success draws a quiet check.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>A persistent label gives context; the textual error explains what a shake alone cannot.</span></li>
+              <li><b>Timing</b><span>Validation follows an attempt to validate or leaving the field, then updates while correcting the input rather than waiting for another submission.</span></li>
+              <li><b>Mechanism</b><span>Local email-format checking selects error or valid state, updates the described live message and draws a check. It does not verify that an address exists.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+
+        <!-- 07 Tabs -->
+        <article class="demo" data-demo="tabs" data-reveal>
+          <div class="demo__stage demo__stage--top">
+            <div class="tabs">
+              <div class="tabs__list" role="tablist" aria-label="Demo tabs" data-tabs-list>
+                <span class="tabs__pill" data-tabs-pill aria-hidden="true"></span>
+                <button class="tabs__tab" type="button" role="tab" id="demo-tab-0" aria-selected="true" aria-controls="demo-tabpanel" tabindex="0"><svg class="icon"><use href="#i-home"/></svg><span>Home</span></button>
+                <button class="tabs__tab" type="button" role="tab" id="demo-tab-1" aria-selected="false" aria-controls="demo-tabpanel" tabindex="-1"><svg class="icon"><use href="#i-search"/></svg><span>Search</span></button>
+                <button class="tabs__tab" type="button" role="tab" id="demo-tab-2" aria-selected="false" aria-controls="demo-tabpanel" tabindex="-1"><svg class="icon"><use href="#i-inbox"/></svg><span>Inbox</span></button>
+                <button class="tabs__tab" type="button" role="tab" id="demo-tab-3" aria-selected="false" aria-controls="demo-tabpanel" tabindex="-1"><svg class="icon"><use href="#i-user"/></svg><span>Profile</span></button>
+              </div>
+              <div class="tabs__panel" id="demo-tabpanel" role="tabpanel" aria-labelledby="demo-tab-0" data-tabs-panel></div>
+            </div>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.07</span>
+            <h3>Elastic tab indicator</h3>
+            <p>The leading edge moves first and the trailing edge catches up, while content slides in the direction of travel.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>The indicator connects old and new selection; content direction preserves the order of destinations.</span></li>
+              <li><b>Timing</b><span>The leading edge starts first and the trailing edge catches up, briefly stretching the pill.</span></li>
+              <li><b>Mechanism</b><span>Measured tab bounds set the pill’s left and right edges. Selection updates roving focus, <code>aria-selected</code> and the shared panel’s label.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+
+        <!-- 08 Rating face -->
+        <article class="demo" data-demo="rating" data-reveal>
+          <div class="demo__stage">
+            <div class="rating">
+              <svg class="rating__face" viewBox="0 0 100 100" aria-hidden="true" data-face>
+                <circle class="face__bg" cx="50" cy="50" r="44"/>
+                <ellipse class="face__eye" data-eye cx="36" cy="42" rx="4.5" ry="6"/>
+                <ellipse class="face__eye" data-eye cx="64" cy="42" rx="4.5" ry="6"/>
+                <path class="face__mouth" data-mouth d="M32 66 Q50 66 68 66"/>
+              </svg>
+              <div class="rating__stars" role="radiogroup" aria-label="Rate your experience" data-stars>
+                <button class="star" type="button" role="radio" aria-checked="false" aria-label="1 star" tabindex="0"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></button>
+                <button class="star" type="button" role="radio" aria-checked="false" aria-label="2 stars" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></button>
+                <button class="star" type="button" role="radio" aria-checked="false" aria-label="3 stars" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></button>
+                <button class="star" type="button" role="radio" aria-checked="false" aria-label="4 stars" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></button>
+                <button class="star" type="button" role="radio" aria-checked="false" aria-label="5 stars" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></button>
+              </div>
+              <p class="rating__label" data-rating-label aria-live="polite">Rate your experience</p>
+            </div>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.08</span>
+            <h3>Expressive rating</h3>
+            <p>Hover previews, click commits. A spring-driven face mirrors the score, so the input has an emotional echo.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>Preview lets someone inspect a score before committing; leaving the stars restores the selected rating.</span></li>
+              <li><b>Timing</b><span>The face follows a spring rather than waiting for a fixed animation to finish, so rapid reversals remain responsive.</span></li>
+              <li><b>Mechanism</b><span>The radio group stores selection separately from hover preview. A shared mood value shapes the SVG eyes, mouth and color, with a textual rating alongside.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+
+        <!-- 09 Stepper -->
+        <article class="demo" data-demo="stepper" data-reveal>
+          <div class="demo__stage">
+            <div class="stepper">
+              <button class="stepper__btn" type="button" data-step="-1" aria-label="Decrease"><svg class="icon"><use href="#i-minus"/></svg></button>
+              <output class="stepper__value" data-stepper-value aria-live="polite">08</output>
+              <button class="stepper__btn" type="button" data-step="1" aria-label="Increase"><svg class="icon"><use href="#i-plus"/></svg></button>
+            </div>
+            <p class="demo__hint">Hold a button to accelerate — limits push back</p>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.09</span>
+            <h3>Rolling stepper</h3>
+            <p>Digits roll in the direction of change. Holding accelerates, and hitting a limit gives a small, honest refusal.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>Directional digits explain increase versus decrease; a refusal at the limit avoids inventing an unavailable value.</span></li>
+              <li><b>Timing</b><span>A press steps once, then holding repeats more rapidly. Release stops the repetition.</span></li>
+              <li><b>Mechanism</b><span>A bounded numeric value feeds the shared rolling-number widget. Hold scheduling accelerates updates; limit feedback leaves the value unchanged.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+
+        <!-- 10 Copy -->
+        <article class="demo" data-demo="copy" data-reveal>
+          <div class="demo__stage">
+            <div class="copy">
+              <code class="copy__code" data-copy-source>npm run serve</code>
+              <button class="copy__btn" type="button" data-copy-btn aria-label="Copy command">
+                <svg class="icon copy__icon copy__icon--copy"><use href="#i-copy"/></svg>
+                <svg class="copy__icon copy__icon--done" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                <span class="copy__tip" role="status">Copied</span>
+              </button>
+            </div>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.10</span>
+            <h3>Copy confirmation</h3>
+            <p>An icon morph plus a springy tooltip: the smallest possible “done”, right where the eye already is.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>Confirmation beside the source avoids sending attention to a distant alert.</span></li>
+              <li><b>Timing</b><span>Copy feedback is brief and returns to the reusable copy affordance.</span></li>
+              <li><b>Mechanism</b><span>The shared clipboard helper tries the secure Clipboard API, then a temporary selected textarea and legacy copy command if unavailable or denied.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+
+        <!-- 11 Pendulum slider -->
+        <article class="demo" data-demo="slider" data-reveal>
+          <div class="demo__stage">
+            <div class="pendulum" data-pendulum>
+              <div class="pendulum__bubble" data-bubble aria-hidden="true"><span data-bubble-value>40</span></div>
+              <div class="pendulum__track" aria-hidden="true"><span class="pendulum__fill" data-pendulum-fill></span></div>
+              <input class="pendulum__input" type="range" min="0" max="100" value="40" aria-label="Volume">
+            </div>
+            <p class="demo__hint">Drag fast and let go</p>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.11</span>
+            <h3>Pendulum slider</h3>
+            <p>The value bubble hangs from the thumb and swings with its velocity: inertia you can feel through a pointer.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>The swinging label suggests inertia while the native range remains the authoritative value.</span></li>
+              <li><b>Timing</b><span>Fast changes excite the bubble; after input stops, the spring settles instead of snapping its angle back.</span></li>
+              <li><b>Mechanism</b><span>Range input positions the fill and bubble, while sampled change drives decorative rotation. Arrow keys update the same value and readout.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+
+        <!-- 12 Notifications -->
+        <article class="demo" data-demo="notify" data-reveal>
+          <div class="demo__stage demo__stage--notify">
+            <button class="bell" type="button" data-bell aria-label="Send a notification">
+              <svg class="bell__svg" viewBox="0 0 24 24" aria-hidden="true">
+                <g class="bell__body"><path d="M6 16v-5a6 6 0 1112 0v5l1.5 2h-15z"/><path d="M12 3v2"/></g>
+                <path class="bell__clapper" d="M10 20.5a2 2 0 004 0"/>
+              </svg>
+              <span class="bell__badge" data-bell-badge>0</span>
+            </button>
+            <ol class="toasts" data-toasts aria-live="polite" aria-label="Notifications"></ol>
+            <p class="demo__hint demo__hint--top">Ring it · hover the stack · swipe to dismiss</p>
+          </div>
+          <footer class="demo__meta">
+            <span class="demo__num">02.12</span>
+            <h3>Stacked notifications</h3>
+            <p>The bell rings with decaying amplitude. Toasts stack in depth, fan out on hover and can be flicked away.</p>
+          </footer>
+          <div class="notes" data-notes>
+            <button class="notes__toggle" type="button">How it works</button>
+            <div class="notes__body"><div class="notes__inner"><ul class="notes__list">
+              <li><b>Rationale</b><span>Depth keeps recent messages prominent; fan-out on hover or focus makes the stack inspectable.</span></li>
+              <li><b>Timing</b><span>The bell’s swing decays. Auto-dismiss uses real elapsed time and pauses during inspection, independently of decorative motion.</span></li>
+              <li><b>Mechanism</b><span>Stack index controls translation, scale and opacity. Swipe gestures or each close button dismiss a toast and update the badge.</span></li>
+            </ul></div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 03 PHYSICS -->
+    <section class="section" id="physics" data-section>
+      <header class="section__head">
+        <span class="section-label" data-scramble>03 — Physics</span>
+        <h2 class="section__title" data-split>Springs, not stopwatches.</h2>
+        <p class="section__lede" data-reveal>Durations are guesses; physics is honest. Grab the weight and throw it, then tune stiffness, damping and mass. Interrupt it mid-flight: a spring keeps its velocity.</p>
+        <p class="section__study"><a href="guide/springs.html">Study in chapter 03 →</a></p>
+      </header>
+
+      <div class="lab" data-spring-lab data-reveal>
+        <div class="panel lab__stage" data-cursor-label="Drag">
+          <canvas class="lab__canvas" data-spring-canvas tabindex="0" aria-label="Spring simulation. Drag the weight, or press the arrow keys to push it."></canvas>
+          <div class="lab__readout" aria-live="polite">
+            <span>ζ <b data-readout-zeta>0.45</b></span>
+            <span class="lab__regime" data-readout-regime>Underdamped</span>
+          </div>
+        </div>
+
+        <div class="panel lab__side">
+          <div class="panel__head">
+            <span class="panel__title">Presets</span>
+            <span class="panel__hint">Classic spring configurations</span>
+          </div>
+          <div class="chips" role="group" aria-label="Spring presets" data-spring-presets>
+            <button class="chip" type="button" data-spring-preset="default" aria-pressed="false">Default</button>
+            <button class="chip" type="button" data-spring-preset="gentle" aria-pressed="false">Gentle</button>
+            <button class="chip" type="button" data-spring-preset="wobbly" aria-pressed="true">Wobbly</button>
+            <button class="chip" type="button" data-spring-preset="stiff" aria-pressed="false">Stiff</button>
+            <button class="chip" type="button" data-spring-preset="slow" aria-pressed="false">Slow</button>
+            <button class="chip" type="button" data-spring-preset="molasses" aria-pressed="false">Molasses</button>
+          </div>
+
+          <div class="controls">
+            <label class="control">
+              <span class="control__label">Stiffness <output data-param-out="stiffness">180</output></span>
+              <input class="range" type="range" min="10" max="500" step="1" value="180" data-param="stiffness">
+            </label>
+            <label class="control">
+              <span class="control__label">Damping <output data-param-out="damping">12</output></span>
+              <input class="range" type="range" min="0" max="120" step="0.5" value="12" data-param="damping">
+            </label>
+            <label class="control">
+              <span class="control__label">Mass <output data-param-out="mass">1</output></span>
+              <input class="range" type="range" min="0.2" max="5" step="0.1" value="1" data-param="mass">
+            </label>
+          </div>
+
+          <dl class="stats">
+            <div><dt>Natural freq.</dt><dd data-readout-omega>13.4 rad/s</dd></div>
+            <div><dt>Settles in</dt><dd data-readout-settle>0.94 s</dd></div>
+          </dl>
+
+          <div class="lab__graph-wrap">
+            <div class="lab__legend"><span class="legend legend--x">x offset</span><span class="legend legend--y">y offset</span></div>
+            <canvas class="lab__graph" data-spring-graph aria-hidden="true"></canvas>
+          </div>
+
+          <button class="btn btn--primary" type="button" data-spring-kick>
+            <span>Kick it</span><svg class="icon"><use href="#i-arrow"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 PRINCIPLES (horizontal, scroll-linked) -->
+    <section class="gallery" id="principles" data-gallery data-section>
+      <div class="gallery__sticky" data-gallery-sticky>
+        <header class="gallery__head">
+          <div>
+            <span class="section-label" data-scramble>04 — Principles</span>
+            <h2 class="section__title" data-split>Old rules, new medium.</h2>
+            <p class="section__study"><a href="guide/choreography.html">Study in chapter 05 →</a></p>
+          </div>
+          <div class="gallery__counter" aria-hidden="true"><span data-gallery-index>01</span><span class="gallery__total">/ 08</span></div>
+        </header>
+
+        <div class="gallery__track" data-gallery-track>
+          <article class="principle">
+            <div class="principle__stage p-squash" aria-hidden="true"><span class="p-ground"></span><span class="p-squash__shadow"></span><span class="p-squash__ball"></span></div>
+            <div class="principle__meta"><span class="principle__num">01</span><h3>Squash &amp; stretch</h3><p>Volume is preserved while shape deforms. It tells the eye what an object is made of.</p></div>
+          </article>
+          <article class="principle">
+            <div class="principle__stage p-anticipate" aria-hidden="true"><span class="p-ground"></span><span class="p-anticipate__block"></span></div>
+            <div class="principle__meta"><span class="principle__num">02</span><h3>Anticipation</h3><p>A small wind-up before the main action prepares the viewer and makes the payoff land.</p></div>
+          </article>
+          <article class="principle">
+            <div class="principle__stage p-ease" aria-hidden="true">
+              <div class="p-ease__row"><span class="p-ease__tag">Linear</span><span class="p-ease__rail"><span class="p-ease__mover p-ease__mover--linear"><span class="p-ease__dot"></span></span></span></div>
+              <div class="p-ease__row"><span class="p-ease__tag">Eased</span><span class="p-ease__rail"><span class="p-ease__mover p-ease__mover--eased"><span class="p-ease__dot"></span></span></span></div>
+            </div>
+            <div class="principle__meta"><span class="principle__num">03</span><h3>Slow in &amp; slow out</h3><p>Nothing physical starts or stops instantly. Compare the robotic linear dot with its eased twin.</p></div>
+          </article>
+          <article class="principle">
+            <div class="principle__stage p-arc" aria-hidden="true">
+              <svg class="p-arc__path" viewBox="0 0 300 200" preserveAspectRatio="none"><path d="M40 160 Q150 -120 260 160"/></svg>
+              <span class="p-arc__x"><span class="p-arc__y"><span class="p-arc__ball"></span></span></span>
+            </div>
+            <div class="principle__meta"><span class="principle__num">04</span><h3>Arcs</h3><p>Natural motion travels in curves. Linear time on x, eased time on y, and a parabola appears.</p></div>
+          </article>
+          <article class="principle">
+            <div class="principle__stage p-follow" aria-hidden="true">
+              <div class="p-follow__rig">
+                <span class="p-follow__head"></span>
+                <span class="p-follow__seg" style="--i:1"><span class="p-follow__seg" style="--i:2"><span class="p-follow__seg" style="--i:3"><span class="p-follow__seg" style="--i:4"></span></span></span></span>
+              </div>
+            </div>
+            <div class="principle__meta"><span class="principle__num">05</span><h3>Follow-through</h3><p>Loose parts keep moving after the body stops, then settle. It sells weight and inertia.</p></div>
+          </article>
+          <article class="principle">
+            <div class="principle__stage p-stagger" aria-hidden="true">
+              <span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span><span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span><span style="--i:6"></span><span style="--i:7"></span>
+            </div>
+            <div class="principle__meta"><span class="principle__num">06</span><h3>Overlap &amp; stagger</h3><p>Offsetting related elements by a few milliseconds turns a block into a choreography.</p></div>
+          </article>
+          <article class="principle">
+            <div class="principle__stage p-timing" aria-hidden="true">
+              <div class="p-timing__col" style="--dur:.55s;--size:22px"><span class="p-timing__track"><span class="p-timing__mover"><span class="p-timing__ball"></span></span></span><em>Light</em></div>
+              <div class="p-timing__col" style="--dur:.95s;--size:32px"><span class="p-timing__track"><span class="p-timing__mover"><span class="p-timing__ball"></span></span></span><em>Medium</em></div>
+              <div class="p-timing__col" style="--dur:1.6s;--size:44px"><span class="p-timing__track"><span class="p-timing__mover"><span class="p-timing__ball"></span></span></span><em>Heavy</em></div>
+            </div>
+            <div class="principle__meta"><span class="principle__num">07</span><h3>Timing</h3><p>Same distance, different durations. Timing alone communicates size, weight and mood.</p></div>
+          </article>
+          <article class="principle">
+            <div class="principle__stage p-exag" aria-hidden="true">
+              <div class="p-exag__item"><svg class="p-exag__heart p-exag__heart--real" viewBox="0 0 24 24"><use href="#i-heart-fill"/></svg><em>Literal</em></div>
+              <div class="p-exag__item"><svg class="p-exag__heart p-exag__heart--felt" viewBox="0 0 24 24"><use href="#i-heart-fill"/></svg><em>Exaggerated</em></div>
+            </div>
+            <div class="principle__meta"><span class="principle__num">08</span><h3>Exaggeration</h3><p>Reality is often too subtle for a screen. Push the pose until it reads at a glance.</p></div>
+          </article>
+        </div>
+
+        <div class="gallery__progress" aria-hidden="true"><span data-gallery-bar></span></div>
+      </div>
+    </section>
+
+    <!-- 05 LAYOUT (FLIP) -->
+    <section class="section" id="layout" data-section>
+      <header class="section__head">
+        <span class="section-label" data-scramble>05 — Layout</span>
+        <h2 class="section__title" data-split>Nothing teleports.</h2>
+        <p class="section__lede" data-reveal>FLIP (First, Last, Invert, Play) turns layout changes into continuous motion, so the eye never loses an object. Shuffle, sort, filter, switch views, then open a swatch for a shared-element transition.</p>
+        <p class="section__study"><a href="guide/layout.html">Study in chapter 07 →</a></p>
+      </header>
+
+      <div class="flip" data-flip data-reveal>
+        <div class="flip__toolbar">
+          <div class="segmented" role="radiogroup" aria-label="Filter swatches" data-flip-filter>
+            <span class="segmented__pill" data-segmented-pill aria-hidden="true"></span>
+            <button type="button" role="radio" aria-checked="true" data-value="all" tabindex="0">All</button>
+            <button type="button" role="radio" aria-checked="false" data-value="warm" tabindex="-1">Warm</button>
+            <button type="button" role="radio" aria-checked="false" data-value="cool" tabindex="-1">Cool</button>
+          </div>
+          <div class="flip__actions">
+            <button class="btn" type="button" data-flip-action="shuffle">Shuffle</button>
+            <button class="btn" type="button" data-flip-action="sort" data-sort-label>Sort by hue</button>
+            <button class="btn" type="button" data-flip-action="layout" aria-pressed="false">List view</button>
+          </div>
+        </div>
+        <ul class="flip__grid" data-flip-grid aria-label="Colour swatches"></ul>
+      </div>
+
+      <div class="modal" data-swatch-modal hidden role="dialog" aria-modal="true" aria-labelledby="swatch-title">
+        <div class="modal__backdrop" data-modal-close></div>
+        <div class="modal__card">
+          <div class="modal__color" data-modal-color></div>
+          <div class="modal__body" data-modal-body>
+            <span class="modal__eyebrow" data-modal-eyebrow>Swatch 01</span>
+            <h3 class="modal__title" id="swatch-title" data-modal-name>Vermilion</h3>
+            <dl class="modal__values" data-modal-values></dl>
+            <div class="modal__tints" data-modal-tints aria-label="Tints"></div>
+            <button class="modal__close" type="button" data-modal-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 DEPTH -->
+    <section class="section" id="depth" data-section>
+      <header class="section__head">
+        <span class="section-label" data-scramble>06 — Depth</span>
+        <h2 class="section__title" data-split>Light, depth &amp; parallax.</h2>
+        <p class="section__lede" data-reveal>Three concept studies. Layers sit at different depths and the light follows your hand, so a flat screen gains a sense of material.</p>
+        <p class="section__study"><a href="guide/depth.html">Study in chapter 08 →</a></p>
+      </header>
+
+      <div class="cases">
+        <div class="case-wrap" data-reveal style="--reveal-delay:0ms">
+          <article class="case" data-tilt data-cursor-label="Tilt">
+            <div class="case__inner">
+              <div class="case__art case__art--orbit" aria-hidden="true">
+                <div class="case__layer orbit__stars" style="--depth:6"></div>
+                <div class="case__layer orbit__rings" style="--depth:16"><span class="orbit__ring orbit__ring--a"><i></i></span><span class="orbit__ring orbit__ring--b"><i></i></span></div>
+                <div class="case__layer orbit__planet" style="--depth:30"><span></span></div>
+              </div>
+              <div class="case__glare" aria-hidden="true"></div>
+              <div class="case__meta">
+                <span class="case__tag">Concept · Onboarding</span>
+                <h3 class="case__title">Orbit</h3>
+                <p>Onboarding choreography where each step orbits into place on a shared spring.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="case-wrap" data-reveal style="--reveal-delay:120ms">
+          <article class="case" data-tilt data-cursor-label="Tilt">
+            <div class="case__inner">
+              <div class="case__art case__art--pulse" aria-hidden="true">
+                <div class="case__layer pulse__grid" style="--depth:4"></div>
+                <div class="case__layer pulse__wave" style="--depth:14">
+                  <svg viewBox="0 0 400 120" preserveAspectRatio="none"><path d="M0 60 H120 L138 60 L150 22 L164 98 L178 40 L190 60 H260 L272 60 L282 34 L294 84 L304 60 H400"/></svg>
+                </div>
+                <div class="case__layer pulse__stat" style="--depth:30"><b>72</b><span>bpm · resting</span></div>
+              </div>
+              <div class="case__glare" aria-hidden="true"></div>
+              <div class="case__meta">
+                <span class="case__tag">Concept · Data viz</span>
+                <h3 class="case__title">Pulse</h3>
+                <p>A health dashboard where data breathes. Live values ease between readings and never jump.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="case-wrap" data-reveal style="--reveal-delay:240ms">
+          <article class="case" data-tilt data-cursor-label="Tilt">
+            <div class="case__inner">
+              <div class="case__art case__art--drift" aria-hidden="true">
+                <div class="case__layer drift__blobs" style="--depth:6"><i></i><i></i></div>
+                <div class="case__layer drift__disc" style="--depth:18"><span></span></div>
+                <div class="case__layer drift__eq" style="--depth:32"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>
+              </div>
+              <div class="case__glare" aria-hidden="true"></div>
+              <div class="case__meta">
+                <span class="case__tag">Concept · Media</span>
+                <h3 class="case__title">Drift</h3>
+                <p>A music player with physical controls. The vinyl carries momentum when you scrub it.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section field-guide" id="field-guide" data-section aria-labelledby="field-guide-title">
+      <header class="section__head">
+        <span class="section-label" data-scramble>07 — Field guide</span>
+        <h2 class="section__title" id="field-guide-title" data-split>Learn motion by touching it.</h2>
+        <p class="section__lede">Nine chapters, 54 lessons and over 60 studies. Read the reasoning, play with a working example, then check your understanding.</p>
+      </header>
+      <div class="field-guide__intro">
+        <div>
+          <h3>Read, play, check.</h3>
+          <p>Read the key idea and pitfall. Play, compare and interrupt the demonstrations. Open the code, then try each chapter’s three-question check.</p>
+          <div class="gi-hero__actions">
+            <a class="btn btn--primary" href="guide/timing.html" data-resume><span data-resume-label>Start with chapter 01</span></a>
+            <a class="btn" href="guide/index.html">Open the field guide</a>
+            <a class="btn" href="guide/cheatsheet.html">Cheat sheet</a>
+            <a class="btn" href="guide/cheatsheet.html#glossary">Glossary</a>
+          </div>
+        </div>
+        <aside class="gi-progress" aria-label="Your study progress">
+          <div class="gi-progress__ring">
+            <svg class="ring" viewBox="0 0 44 44" width="110" height="110" data-overall-ring aria-hidden="true"><circle class="ring__track" cx="22" cy="22" r="19"/><circle class="ring__value" cx="22" cy="22" r="19"/></svg>
+            <span class="gi-progress__value"><span data-overall-pct>0</span><small>%</small></span>
+          </div>
+          <p><b data-overall-done>0</b> of 9 chapters studied</p>
+          <p>With JavaScript, time spent reading and your completion choices update the same local progress here and in the guide.</p>
+          <button type="button" data-progress-reset>Reset progress</button>
+        </aside>
+      </div>
+      <ol class="field-guide__cards">
+        <li><a class="chapter-row" href="guide/timing.html" style="--c:var(--gold)" data-chapter-row="timing"><span class="chapter-row__num">01</span><span class="chapter-row__main"><span class="chapter-row__title">Timing &amp; duration</span><span class="chapter-row__blurb">How long motion should last, and why distance, direction and latency change the answer.</span></span><span class="chapter-row__meta"><span>6 lessons</span><span>15 min</span></span><span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span></a></li>
+        <li><a class="chapter-row" href="guide/easing.html" style="--c:var(--accent)" data-chapter-row="easing"><span class="chapter-row__num">02</span><span class="chapter-row__main"><span class="chapter-row__title">Easing &amp; curves</span><span class="chapter-row__blurb">Curves give motion its character. Learn the families, when to use each, and how to author your own.</span></span><span class="chapter-row__meta"><span>7 lessons</span><span>20 min</span></span><span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span></a></li>
+        <li><a class="chapter-row" href="guide/springs.html" style="--c:var(--mint)" data-chapter-row="springs"><span class="chapter-row__num">03</span><span class="chapter-row__main"><span class="chapter-row__title">Springs &amp; physics</span><span class="chapter-row__blurb">Physical motion that stays interruptible: stiffness, damping, momentum, rubber bands and gravity.</span></span><span class="chapter-row__meta"><span>7 lessons</span><span>20 min</span></span><span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span></a></li>
+        <li><a class="chapter-row" href="guide/feedback.html" style="--c:var(--lime)" data-chapter-row="feedback"><span class="chapter-row__num">04</span><span class="chapter-row__main"><span class="chapter-row__title">Micro-interactions</span><span class="chapter-row__blurb">Fourteen production patterns for forms, gestures, progress and delight, each taken apart.</span></span><span class="chapter-row__meta"><span>5 lessons</span><span>25 min</span></span><span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span></a></li>
+        <li><a class="chapter-row" href="guide/choreography.html" style="--c:var(--iris)" data-chapter-row="choreography"><span class="chapter-row__num">05</span><span class="chapter-row__main"><span class="chapter-row__title">Choreography</span><span class="chapter-row__blurb">Stagger, sequence and overlap: turning many moving parts into one readable gesture.</span></span><span class="chapter-row__meta"><span>6 lessons</span><span>18 min</span></span><span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span></a></li>
+        <li><a class="chapter-row" href="guide/scroll.html" style="--c:var(--sky)" data-chapter-row="scroll"><span class="chapter-row__num">06</span><span class="chapter-row__main"><span class="chapter-row__title">Scroll-driven motion</span><span class="chapter-row__blurb">Scroll-triggered versus scroll-linked, parallax, pinned storytelling and native scroll timelines.</span></span><span class="chapter-row__meta"><span>6 lessons</span><span>16 min</span></span><span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span></a></li>
+        <li><a class="chapter-row" href="guide/layout.html" style="--c:var(--accent)" data-chapter-row="layout"><span class="chapter-row__num">07</span><span class="chapter-row__main"><span class="chapter-row__title">Layout &amp; continuity</span><span class="chapter-row__blurb">Keep objects continuous when layout changes: FLIP, animating height, View Transitions and morphing.</span></span><span class="chapter-row__meta"><span>6 lessons</span><span>18 min</span></span><span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span></a></li>
+        <li><a class="chapter-row" href="guide/depth.html" style="--c:var(--iris)" data-chapter-row="depth"><span class="chapter-row__num">08</span><span class="chapter-row__main"><span class="chapter-row__title">Depth &amp; material</span><span class="chapter-row__blurb">Shadows, perspective, blur and light that give a flat screen a sense of material.</span></span><span class="chapter-row__meta"><span>6 lessons</span><span>14 min</span></span><span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span></a></li>
+        <li><a class="chapter-row" href="guide/craft.html" style="--c:var(--mint)" data-chapter-row="craft"><span class="chapter-row__num">09</span><span class="chapter-row__main"><span class="chapter-row__title">Accessibility &amp; performance</span><span class="chapter-row__blurb">Motion that includes everyone and respects the frame budget: reduced motion, compositor trade-offs and layout cost.</span></span><span class="chapter-row__meta"><span>5 lessons</span><span>16 min</span></span><span class="chapter-row__ring" data-ring-slot><span data-ring-label>0%</span></span></a></li>
+      </ol>
+      <p class="field-guide__qualification">The curriculum describes design goals, not performance guarantees. Chapter 09 measures main-thread intervals and layout work, not visible compositor FPS.</p>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="contact">
+    <div class="footer__inner">
+      <span class="section-label" data-scramble>08 — Fin</span>
+      <h2 class="footer__title" data-jelly data-reveal>Make it move.</h2>
+      <p class="footer__hint" aria-hidden="true">Sweep your cursor through the letters</p>
+
+      <div class="footer__row">
+        <button class="ring-cta" type="button" data-replay data-magnetic="0.35">
+          <svg class="ring-cta__text" viewBox="0 0 200 200" aria-hidden="true">
+            <defs><path id="ring-path" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs>
+            <text><textPath href="#ring-path" textLength="500">Replay the intro · Replay the intro · Replay the intro ·</textPath></text>
+          </svg>
+          <span class="ring-cta__core" data-magnetic-inner><svg class="icon"><use href="#i-refresh"/></svg></span>
+          <span class="sr-only">Replay the intro</span>
+        </button>
+
+        <div class="footer__info">
+          <p class="footer__statement">Designed and engineered by Maestro as a portfolio of motion and interaction craft.</p>
+          <ul class="footer__specs">
+            <li>Vanilla HTML, CSS &amp; JavaScript</li>
+            <li>Zero dependencies</li>
+            <li>Shared ticker + finite instrumentation</li>
+            <li>Intentional rendering-cost experiments</li>
+            <li>Respects prefers-reduced-motion</li>
+          </ul>
+        </div>
+
+        <button class="to-top" type="button" data-to-top data-magnetic="0.4" aria-label="Back to top">
+          <svg class="to-top__ring" viewBox="0 0 56 56" aria-hidden="true">
+            <circle class="to-top__track" cx="28" cy="28" r="26"/>
+            <circle class="to-top__progress" cx="28" cy="28" r="26" data-top-progress/>
+          </svg>
+          <svg class="icon to-top__icon"><use href="#i-arrow-up"/></svg>
+        </button>
+      </div>
+
+      <div class="footer__base">
+        <span>© 2026 Kinetic</span>
+        <span>Local time <b data-clock>--:--</b></span>
+        <span>Press <kbd>M</kbd> to toggle motion</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
